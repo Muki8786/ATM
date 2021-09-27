@@ -15,7 +15,7 @@ public class CashDispenser {
 
     public boolean sufficientATMBalanceCheck(int amount)
     {
-        if(amount >= balance)
+        if(amount > balance)
         {
             return false;
         }

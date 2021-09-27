@@ -207,6 +207,7 @@ public class Atm {
 
     public int displayFastCashMenu() {
         int choice = 0;
+        int amount = 0;
         while(true) {
             System.out.println("\nThe choices for Fast Cash are : ");
             System.out.println("\t\tPress 1 --- 500");
@@ -219,15 +220,15 @@ public class Atm {
                 choice = input.nextInt();
 
                 if (choice == 1) {
-                    choice = 500;
+                    amount = 500;
                 } else if (choice == 2) {
-                    choice = 1000;
+                    amount = 1000;
                 } else if (choice == 3) {
-                    choice = 5000;
+                    amount = 5000;
                 } else if (choice == 4) {
-                    choice = 10000;
+                    amount = 10000;
                 } else if(choice == 0) {
-                    choice = 0;
+                    amount = 0;
                 }
                 break;
                 } catch (InputMismatchException inputMismatchException)
@@ -243,13 +244,13 @@ public class Atm {
             return 0;
         }
         else
-            return choice;
+            return amount;
     }
 
     public void logout()
     {
         System.out.println("\n\t\tThank you for using our ATM");
-        System.out.println("\t\tPlease cleanse your hands with sanitizer and before leaving :) \n\n\n");
+        System.out.println("\t\tPlease sanitize your hands before leaving :) \n\n\n");
         run();
     }
 
@@ -339,7 +340,6 @@ public class Atm {
         return balanceChoice;
 
     }
-
 
     public static Atm getInstance() {
         if (uniqueInstance == null) {

@@ -36,7 +36,7 @@ public class AccountsDatabase {
         if (userAccount != null)
             return userAccount.validatePIN(userPIN);
         else
-            return false; // account number not found, so return false
+            return false;
     }
 
 

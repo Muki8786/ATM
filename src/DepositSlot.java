@@ -14,7 +14,7 @@ public class DepositSlot {
 
     public boolean depositCapacityCheck(int amount)
     {
-        if(amount + depositBalance >= depositCapacity)
+        if(amount + depositBalance > depositCapacity)
             return false;
         else
             return true;
