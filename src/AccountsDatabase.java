@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccountsDatabase {
-    static ArrayList<Account> accounts = new ArrayList<Account>() ;
+    private static ArrayList<Account> accounts = new ArrayList<Account>() ;
 
     public AccountsDatabase()
     {
@@ -38,7 +38,6 @@ public class AccountsDatabase {
         else
             return false;
     }
-
 
     public float getBalance(int userAccountNumber)
     {
@@ -80,6 +79,5 @@ public class AccountsDatabase {
     {
         return getAccount(userAccountNumber).getTransactionHistories();
     }
-
 
 }

@@ -39,6 +39,7 @@ public class Atm {
         }
 
     }
+
     public boolean login()
     {
         System.out.println("\t\tWelcome!\n");
@@ -69,11 +70,17 @@ public class Atm {
         else if(choice == 1) {
             balanceInquiry = new BalanceInquiry(currentAccountNumber, accountsDatabase);
             balanceInquiry.balanceInquiry();
-            logout();
+            if(exitOrContinue() == 1)
+            {
+                createMenu();
+            }
+            else
+            {
+                logout();
+            }
         }
 
         else if (choice == 2) {
-            boolean withdrawn = false;
             withdrawal = new Withdrawal(currentAccountNumber, accountsDatabase, cashDispenser);
 
             int amount = getUserAmount();
@@ -87,7 +94,14 @@ public class Atm {
                     }
                 }
             }
-            logout();
+            if(exitOrContinue() == 1)
+            {
+                createMenu();
+            }
+            else
+            {
+                logout();
+            }
         }
 
         else if(choice == 3)
@@ -106,7 +120,14 @@ public class Atm {
                         }
                 }
             }
-            logout();
+            if(exitOrContinue() == 1)
+            {
+                createMenu();
+            }
+            else
+            {
+                logout();
+            }
         }
 
         else if(choice == 4)
@@ -124,7 +145,14 @@ public class Atm {
                     }
                 }
             }
-            logout();
+            if(exitOrContinue() == 1)
+            {
+                createMenu();
+            }
+            else
+            {
+                logout();
+            }
         }
 
         else if(choice == 5)
@@ -142,7 +170,14 @@ public class Atm {
             {
                 System.out.println("\n\t\tPin cannot be set");
             }
-            logout();
+            if(exitOrContinue() == 1)
+            {
+                createMenu();
+            }
+            else
+            {
+                logout();
+            }
         }
 
         else if(choice == 6)
@@ -167,10 +202,17 @@ public class Atm {
                             fundTransfer.transferFund(receiverAccountNumber , amount);
                         }
                     }
-                    else logout();
                 }
                 else{
                     System.out.println("\nInvalid Account Number");
+                }
+                if(exitOrContinue() == 1)
+                {
+                    createMenu();
+                }
+                else
+                {
+                    logout();
                 }
             }
             else if(inputChoice == 2)
@@ -183,11 +225,22 @@ public class Atm {
                 if(fundTransfer.checkReceiver(receiverAccountNumber))
                 {
                     int amount = getUserAmount();
-                    if(amount == 0) logout();
-                    else
+                    if(amount != 0)
                     {
                         fundTransfer.transferFund(receiverAccountNumber , amount);
                     }
+                }
+                else
+                {
+                    System.out.println("Invalid account number");
+                }
+                if(exitOrContinue() == 1)
+                {
+                    createMenu();
+                }
+                else
+                {
+                    logout();
                 }
             }
 
@@ -195,7 +248,14 @@ public class Atm {
             {
                 System.out.println("Invalid choice");
             }
-            logout();
+            if(exitOrContinue() == 1)
+            {
+                createMenu();
+            }
+            else
+            {
+                logout();
+            }
         }
 
         else if (choice == 0)
@@ -425,6 +485,26 @@ public class Atm {
             } catch (InputMismatchException inputMismatchException)
             {
                 System.out.println("Invalid choice!");
+                input.nextLine();
+            }
+        }
+        return choice;
+    }
+
+    public int exitOrContinue()
+    {
+        int choice = 0;
+
+        while(true)
+        {
+            System.out.println("\nPress 1 --- Continue to Transaction menu");
+            System.out.println("Press any other number key to exit");
+            try {
+                choice = input.nextInt();
+                break;
+            } catch (InputMismatchException inputMismatchException)
+            {
+                System.out.println("Enter a number!");
                 input.nextLine();
             }
         }
