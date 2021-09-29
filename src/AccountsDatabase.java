@@ -59,10 +59,7 @@ public class AccountsDatabase {
         return getAccount(userAccountNumber).getAdmin();
     }
 
-    public void addTransaction(int userAccountNumber , String transactionDetails)
-    {
-        getAccount(userAccountNumber).setTransactionHistories(transactionDetails);
-    }
+
 
     public boolean accountCheck(int accountNumber)
     {
@@ -75,9 +72,6 @@ public class AccountsDatabase {
 
     }
 
-    public List<String> getTransactions(int userAccountNumber)
-    {
-        return getAccount(userAccountNumber).getTransactionHistories();
-    }
+
 
 }

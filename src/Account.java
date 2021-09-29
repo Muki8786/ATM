@@ -10,8 +10,6 @@ public class Account {
     private String address;
     private float balance;
     private int admin;
-    private List<String> transactionHistories;
-
 
 
     public Account(String Username, int accountNumber, String mobileNumber , String address , int pin , float balance, int admin)
@@ -120,18 +118,6 @@ public class Account {
         setBalance(getBalance() - amount);
     }
 
-    public void setTransactionHistories(String transactionDetails)
-    {
-        if(transactionHistories.size() == 0)
-            transactionHistories = new ArrayList<>();
-
-        transactionHistories.add(transactionDetails);
-    }
-
-    public List<String> getTransactionHistories()
-    {
-        return transactionHistories;
-    }
 
 
 }

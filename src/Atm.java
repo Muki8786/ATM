@@ -66,7 +66,7 @@ public class Atm {
         displayMainMenu();
         int choice = getInputMainMenu();
         if(choice == -1)
-            run();
+            logout();
         else if(choice == 1) {
             balanceInquiry = new BalanceInquiry(currentAccountNumber, accountsDatabase);
             balanceInquiry.balanceInquiry();
