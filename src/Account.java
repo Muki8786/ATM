@@ -11,7 +11,7 @@ public class Account {
     private float balance;
     private int admin;
     private List<String> transactionHistories;
-    private boolean val;
+    private boolean isTrueOrFalse ;
 
 
 
