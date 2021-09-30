@@ -59,8 +59,6 @@ public class AccountsDatabase {
         return getAccount(userAccountNumber).getAdmin();
     }
 
-
-
     public boolean accountCheck(int accountNumber)
     {
         for(Account currentAccount : accounts)

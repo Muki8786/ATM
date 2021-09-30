@@ -37,7 +37,6 @@ public class Atm {
         {
             run();
         }
-
     }
 
     public boolean login()
@@ -58,7 +57,6 @@ public class Atm {
             System.out.println("Invalid Account number/Pin!");
             return false;
         }
-
     }
 
     public void createMenu()
@@ -66,9 +64,9 @@ public class Atm {
         displayMainMenu();
         int choice = getInputMainMenu();
         if(choice == -1)
-            logout();
+            createMenu();
         else if(choice == 1) {
-            balanceInquiry = new BalanceInquiry(currentAccountNumber, accountsDatabase);
+            balanceInquiry = new BalanceInquiry(getAccount(currentAccountNumber));
             balanceInquiry.balanceInquiry();
             if(exitOrContinue() == 1)
             {
@@ -81,7 +79,7 @@ public class Atm {
         }
 
         else if (choice == 2) {
-            withdrawal = new Withdrawal(currentAccountNumber, accountsDatabase, cashDispenser);
+            withdrawal = new Withdrawal(getAccount(currentAccountNumber), cashDispenser);
 
             int amount = getUserAmount();
             if(amount != 0)
@@ -89,7 +87,7 @@ public class Atm {
                 if (withdrawal.withdraw(amount)) {
                     int balanceChoice = balanceAfterTransaction();
                     if (balanceChoice == 1) {
-                        balanceInquiry = new BalanceInquiry(currentAccountNumber, accountsDatabase);
+                        balanceInquiry = new BalanceInquiry(getAccount(currentAccountNumber));
                         balanceInquiry.balanceInquiry();
                     }
                 }
@@ -106,7 +104,7 @@ public class Atm {
 
         else if(choice == 3)
         {
-            withdrawal = new Withdrawal(currentAccountNumber , accountsDatabase , cashDispenser);
+            withdrawal = new Withdrawal(getAccount(currentAccountNumber), cashDispenser);
 
             int amount = displayFastCashMenu();
             if(amount > 0)
@@ -115,7 +113,7 @@ public class Atm {
                 {
                         int balanceChoice = balanceAfterTransaction();
                         if (balanceChoice == 1) {
-                            balanceInquiry = new BalanceInquiry(currentAccountNumber, accountsDatabase);
+                            balanceInquiry = new BalanceInquiry(getAccount(currentAccountNumber));
                             balanceInquiry.balanceInquiry();
                         }
                 }
@@ -132,7 +130,7 @@ public class Atm {
 
         else if(choice == 4)
         {
-            deposit = new Deposit(currentAccountNumber , accountsDatabase , depositSlot);
+            deposit = new Deposit(getAccount(currentAccountNumber), depositSlot);
             int amount = getUserAmount();
             if(amount > 0)
             {
@@ -140,7 +138,7 @@ public class Atm {
                 {
                     int balanceChoice = balanceAfterTransaction();
                     if (balanceChoice == 1) {
-                        balanceInquiry = new BalanceInquiry(currentAccountNumber, accountsDatabase);
+                        balanceInquiry = new BalanceInquiry(getAccount(currentAccountNumber));
                         balanceInquiry.balanceInquiry();
                     }
                 }
@@ -157,7 +155,7 @@ public class Atm {
 
         else if(choice == 5)
         {
-            changePin = new ChangePin(currentAccountNumber , accountsDatabase);
+            changePin = new ChangePin(getAccount(currentAccountNumber));
             int newPin = getNewPin();
             if(newPin != 0)
             {
@@ -182,7 +180,6 @@ public class Atm {
 
         else if(choice == 6)
         {
-            fundTransfer = new FundTransfer(currentAccountNumber , accountsDatabase);
 
             int inputChoice = 0;
             inputChoice = getInputFundTransferMenu();
@@ -192,28 +189,22 @@ public class Atm {
                 System.out.println("\nPlease provide the Receiver's details");
                 System.out.println("\n\t\t!Please press 0 if you want to exit!");
                 receiverAccountNumber = inputAccountNumber();
-                if(fundTransfer.checkReceiver(receiverAccountNumber))
+                if(checkReceiver(receiverAccountNumber))
                 {
-                    deposit = new Deposit(currentAccountNumber , accountsDatabase , depositSlot);
+                    fundTransfer = new FundTransfer(getAccount(currentAccountNumber) , getAccount(receiverAccountNumber));
+                    deposit = new Deposit(getAccount(currentAccountNumber), depositSlot);
                     int amount = getUserAmount();
                     if(amount !=0)
                     {
                         if(deposit.depositCash(amount)) {
-                            fundTransfer.transferFund(receiverAccountNumber , amount);
+                            fundTransfer.transferFund(amount);
                         }
                     }
                 }
                 else{
                     System.out.println("\nInvalid Account Number");
                 }
-                if(exitOrContinue() == 1)
-                {
-                    createMenu();
-                }
-                else
-                {
-                    logout();
-                }
+
             }
             else if(inputChoice == 2)
             {
@@ -222,32 +213,24 @@ public class Atm {
                 System.out.println("\nPlease provide the Receiver's details");
                 System.out.println("\n\t\t!Please press 0 if you want to exit!");
                 receiverAccountNumber = inputAccountNumber();
-                if(fundTransfer.checkReceiver(receiverAccountNumber))
+                if(checkReceiver(receiverAccountNumber))
                 {
                     int amount = getUserAmount();
                     if(amount != 0)
                     {
-                        fundTransfer.transferFund(receiverAccountNumber , amount);
+                        fundTransfer.transferFund(amount);
                     }
                 }
                 else
                 {
                     System.out.println("Invalid account number");
                 }
-                if(exitOrContinue() == 1)
-                {
-                    createMenu();
-                }
-                else
-                {
-                    logout();
-                }
             }
-
             else if(inputChoice != 0)
             {
                 System.out.println("Invalid choice");
             }
+
             if(exitOrContinue() == 1)
             {
                 createMenu();
@@ -470,6 +453,18 @@ public class Atm {
         return newPin;
     }
 
+    public boolean checkReceiver(int receiverAccountNumber)
+    {
+        if(accountsDatabase.accountCheck(receiverAccountNumber))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public int getInputFundTransferMenu()
     {
         int choice = 0;
@@ -509,6 +504,11 @@ public class Atm {
             }
         }
         return choice;
+    }
+
+    public Account getAccount(int currentAccountNumber)
+    {
+        return accountsDatabase.getAccount(currentAccountNumber);
     }
 
 

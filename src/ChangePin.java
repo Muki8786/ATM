@@ -1,8 +1,11 @@
-public class ChangePin extends Transaction{
+public class ChangePin {
 
-    public ChangePin(int accountNumber , AccountsDatabase accountsDatabase)
+    private Account account;
+
+
+    public ChangePin(Account account)
     {
-        super(accountNumber , accountsDatabase);
+        this.account = account;
     }
 
     public boolean verifyOldPin(int newPin , int oldPin)
@@ -21,14 +24,13 @@ public class ChangePin extends Transaction{
 
     public boolean changeUserPin(int newPin)
     {
-        AccountsDatabase accountsDatabase = getAccountsDatabase();
-        int oldPin = accountsDatabase.getAccount(getAccountNumber()).getPin();
+        int oldPin = account.getPin();
         if(verifyOldPin(oldPin , newPin) == false)
         {
             return false;
         }
         else{
-            accountsDatabase.getAccount(getAccountNumber()).setPin(newPin);
+            account.setPin(newPin);
             return true;
         }
     }

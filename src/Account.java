@@ -93,7 +93,6 @@ public class Account {
     }
 
 
-
     public boolean validatePIN(int userPIN)
     {
         if (userPIN == getPin())
@@ -102,11 +101,6 @@ public class Account {
             return false;
     }
 
-
-    public float checkBalance()
-    {
-        return balance;
-    }
 
     public void credit(float amount)
     {

@@ -1,23 +1,22 @@
-public class Withdrawal extends Transaction{
-    private int amount;
+public class Withdrawal {
     private CashDispenser cashDispenser;
-
-    public Withdrawal(int accountNumber , AccountsDatabase accountsDatabase ,CashDispenser cashDispenser)
+    private Account account;
+    public Withdrawal(Account account,CashDispenser cashDispenser)
     {
-        super(accountNumber,accountsDatabase);
+        this.account = account;
         this.cashDispenser = cashDispenser;
     }
 
     public boolean withdraw(int amount)
     {
-        AccountsDatabase accountsDatabase = getAccountsDatabase();
-        float balance = accountsDatabase.getBalance(getAccountNumber());
+
+        float balance = account.getBalance();
 
         if(amount <= balance)
         {
             if (cashDispenser.sufficientATMBalanceCheck(amount)) {
 
-                accountsDatabase.debit(getAccountNumber(), amount);
+                account.debit(amount);
 
                 cashDispenser.dispenseCash(amount);
 

@@ -1,38 +1,26 @@
-public class FundTransfer extends Transaction{
-    private AccountsDatabase accountsDatabase;
+public class FundTransfer {
+    private Account senderAccount;
+    private Account receiverAccount;
 
-    public FundTransfer(int accountNumber , AccountsDatabase accountsDatabase )
+    public FundTransfer(Account senderAccount , Account receiverAccount)
     {
-        super(accountNumber , accountsDatabase);
+        this.receiverAccount = receiverAccount;
+        this.senderAccount = senderAccount;
     }
 
-    public boolean checkReceiver(int receiverAccountNumber)
+    public void transferFund(int amount)
     {
-        if(getAccountsDatabase().accountCheck(receiverAccountNumber))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    public void transferFund(int receiverAccountNumber, int amount)
-    {
-        accountsDatabase = getAccountsDatabase();
-        float senderAccountBalance = accountsDatabase.getAccount(getAccountNumber()).checkBalance();
+        float senderAccountBalance = senderAccount.getBalance();
 
         if(amount <= senderAccountBalance)
         {
-            accountsDatabase.debit(getAccountNumber() , amount);
-            accountsDatabase.credit(receiverAccountNumber , amount);
+            senderAccount.debit(amount);
+            receiverAccount.credit(amount);
             System.out.println("\n\t\tFund Transfer Successful");
         }
         else
         {
             System.out.println("\n\t\tInsufficient balance");
         }
-
     }
 }

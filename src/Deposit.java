@@ -1,19 +1,19 @@
-public class Deposit extends Transaction{
-    private int amount;
+public class Deposit {
+    private Account account;
     private DepositSlot depositSlot;
-    public Deposit(int accountNumber, AccountsDatabase accountsDatabase , DepositSlot depositSlot)
+
+    public Deposit(Account account, DepositSlot depositSlot)
     {
-        super(accountNumber , accountsDatabase);
+        this.account = account;
         this.depositSlot = depositSlot;
     }
 
     public boolean depositCash(int amount ) {
-        AccountsDatabase accountsDatabase = getAccountsDatabase();
 
         if(depositSlot.depositCapacityCheck(amount))
         {
             depositSlot.acceptCash(amount);
-            accountsDatabase.credit(getAccountNumber() , amount);
+            account.credit(amount);
             System.out.println("\nDeposit successful");
             return true;
         }

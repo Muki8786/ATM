@@ -1,18 +1,16 @@
-public class BalanceInquiry extends Transaction{
+public class BalanceInquiry {
 
+    private Account account;
 
-    public BalanceInquiry(int accountNumber , AccountsDatabase accountsDatabase )
+    public BalanceInquiry(Account account)
     {
-        super(accountNumber,accountsDatabase);
+        this.account = account;
     }
 
 
     public void balanceInquiry() {
-        AccountsDatabase accountsDatabase = getAccountsDatabase();
-
-        float balance = accountsDatabase.getBalance(getAccountNumber());
+       float balance = account.getBalance();
 
         System.out.println("\nYour balance is : Rs." + balance);
-
     }
 }
