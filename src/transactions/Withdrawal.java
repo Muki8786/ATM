@@ -1,7 +1,12 @@
+package transactions;
+
+import accounts.*;
+import atm.*;
+
 public class Withdrawal {
     private CashDispenser cashDispenser;
     private Account account;
-    public Withdrawal(Account account,CashDispenser cashDispenser)
+    public Withdrawal(Account account, CashDispenser cashDispenser)
     {
         this.account = account;
         this.cashDispenser = cashDispenser;

@@ -1,4 +1,8 @@
-import java.io.IOException;
+package atm;
+
+import accounts.*;
+import transactions.*;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -31,7 +35,10 @@ public class Atm {
     {
         if(login())
         {
-            createMenu();
+           if(getAccount(currentAccountNumber).getAdmin() == 0)
+               createMenu();
+           else
+               createAdminMenu();
         }
         else
         {
@@ -54,7 +61,7 @@ public class Atm {
             return true;
         }
         else{
-            System.out.println("Invalid Account number/Pin!");
+            System.out.println("Invalid accounts.Account number/Pin!");
             return false;
         }
     }
@@ -85,11 +92,7 @@ public class Atm {
             if(amount != 0)
             {
                 if (withdrawal.withdraw(amount)) {
-                    int balanceChoice = balanceAfterTransaction();
-                    if (balanceChoice == 1) {
-                        balanceInquiry = new BalanceInquiry(getAccount(currentAccountNumber));
-                        balanceInquiry.balanceInquiry();
-                    }
+                    System.out.println("\n\t\tWithdrawal successful!\n");
                 }
             }
             if(exitOrContinue() == 1)
@@ -109,13 +112,9 @@ public class Atm {
             int amount = displayFastCashMenu();
             if(amount > 0)
             {
-                if(withdrawal.withdraw(amount) == true)
+                if(withdrawal.withdraw(amount))
                 {
-                        int balanceChoice = balanceAfterTransaction();
-                        if (balanceChoice == 1) {
-                            balanceInquiry = new BalanceInquiry(getAccount(currentAccountNumber));
-                            balanceInquiry.balanceInquiry();
-                        }
+                    System.out.println("\n\t\tWithdrawal successful!\n");
                 }
             }
             if(exitOrContinue() == 1)
@@ -136,11 +135,7 @@ public class Atm {
             {
                 if(deposit.depositCash(amount))
                 {
-                    int balanceChoice = balanceAfterTransaction();
-                    if (balanceChoice == 1) {
-                        balanceInquiry = new BalanceInquiry(getAccount(currentAccountNumber));
-                        balanceInquiry.balanceInquiry();
-                    }
+                    System.out.println("\n\t\tDeposit successful!\n");
                 }
             }
             if(exitOrContinue() == 1)
@@ -202,7 +197,7 @@ public class Atm {
                     }
                 }
                 else{
-                    System.out.println("\nInvalid Account Number");
+                    System.out.println("\nInvalid accounts.Account Number");
                 }
 
             }
@@ -298,7 +293,7 @@ public class Atm {
     }
 
     public void displayMainMenu() {
-        System.out.println("\n\t\tHi "+ accountsDatabase.getAccount(currentAccountNumber).getUsername() + "!");
+        System.out.println("\n\t\tHi "+ getAccount(currentAccountNumber).getUsername() + "!");
         System.out.println("\n\t\tPress 1 for BALANCE INQUIRY");
         System.out.println("\t\tPress 2 for WITHDRAWAL");
         System.out.println("\t\tPress 3 for FAST CASH");
@@ -363,7 +358,7 @@ public class Atm {
     public int balanceAfterTransaction()
     {
         int balanceChoice = 0;
-        System.out.println("\n\t\tTransaction successful!\n");
+        System.out.println("\n\t\taccounts.Transaction successful!\n");
         System.out.println("\nTo see your balance on the screen ");
         while(true) {
             System.out.println("Press 1 to check your balance ");
@@ -400,7 +395,7 @@ public class Atm {
                 userAccountNumber = input.nextInt();
                 break;
             } catch (InputMismatchException inputMismatchException) {
-                System.out.println("\n\nThe Account number you have entered does not match");
+                System.out.println("\n\nThe accounts.Account number you have entered does not match");
                 System.out.println("\nTry again");
                 input.nextLine();
             }
@@ -470,8 +465,8 @@ public class Atm {
         int choice = 0;
         while(true)
         {
-            System.out.println("\n\t\tPress 1 --- Through Deposit");
-            System.out.println("\t\tPress 2 --- Through Account balance");
+            System.out.println("\n\t\tPress 1 --- Through transactions.Deposit");
+            System.out.println("\t\tPress 2 --- Through accounts.Account balance");
             System.out.println("\t\tPress 0 --- Exit");
             System.out.print("\nEnter your choice : ");
             try{
@@ -511,5 +506,51 @@ public class Atm {
         return accountsDatabase.getAccount(currentAccountNumber);
     }
 
+    public void createAdminMenu()
+    {
+        displayAdminMenu();
+        int choice = getAdminMenuInput();
+
+        if(choice == 1)
+        {
+            CashDispenser.fillCashDispenser();
+        }
+        else if(choice == 2)
+        {
+            DepositSlot.emptyDepositSlot();
+        }
+        else
+        {
+           logout();
+        }
+    }
+
+    public void displayAdminMenu()
+    {
+        System.out.println("\n\t\tHi "+ getAccount(currentAccountNumber).getUsername() + "!");
+        System.out.println("\t\tPress 1 to fill cash into Dispenser");
+        System.out.println("\t\tPress 2 to empty cash from transactions.Deposit Slot");
+        System.out.println("\t\tPress 0 to Exit");
+    }
+
+    public int getAdminMenuInput()
+    {
+        int choice = 0;
+        while(true)
+        {
+            System.out.print("\n\t\tEnter your choice : ");
+           try {
+               choice = input.nextInt();
+               break;
+           }
+           catch (InputMismatchException inputMismatchException)
+           {
+               System.out.println("\t\tInvalid choice");
+               displayAdminMenu();
+               input.nextLine();
+           }
+        }
+        return choice;
+    }
 
 }

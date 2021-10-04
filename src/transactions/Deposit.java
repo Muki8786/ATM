@@ -1,3 +1,8 @@
+package transactions;
+
+import accounts.*;
+import atm.*;
+
 public class Deposit {
     private Account account;
     private DepositSlot depositSlot;
@@ -14,7 +19,6 @@ public class Deposit {
         {
             depositSlot.acceptCash(amount);
             account.credit(amount);
-            System.out.println("\nDeposit successful");
             return true;
         }
         else

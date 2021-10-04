@@ -1,5 +1,7 @@
+package accounts;
+
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class AccountsDatabase {
     private static ArrayList<Account> accounts = new ArrayList<Account>() ;

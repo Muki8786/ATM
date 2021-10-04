@@ -1,3 +1,7 @@
+package transactions;
+
+import accounts.*;
+
 public class ChangePin {
 
     private Account account;

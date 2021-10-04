@@ -1,3 +1,5 @@
+package atm;
+
 public class StartAtm {
     public static void main(String args[])
     {

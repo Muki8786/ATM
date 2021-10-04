@@ -1,3 +1,5 @@
+package accounts;
+
 public class TransactionDetails {
     private int accountNumber;
     private String type;
@@ -14,7 +16,7 @@ public class TransactionDetails {
 
     @Override
     public String toString() {
-        return "\nTransactionDetails - " +
+        return "\naccounts.TransactionDetails - " +
                 "accountNumber=" + accountNumber +
                 ", type='" + type + '\'' +
                 ", amount=" + amount +

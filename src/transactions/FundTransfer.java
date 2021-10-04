@@ -1,3 +1,7 @@
+package transactions;
+
+import accounts.*;
+
 public class FundTransfer {
     private Account senderAccount;
     private Account receiverAccount;
