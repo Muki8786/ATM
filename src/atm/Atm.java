@@ -61,7 +61,7 @@ public class Atm {
             return true;
         }
         else{
-            System.out.println("Invalid accounts.Account number/Pin!");
+            System.out.println("Invalid Account number/Pin!");
             return false;
         }
     }
@@ -197,7 +197,7 @@ public class Atm {
                     }
                 }
                 else{
-                    System.out.println("\nInvalid accounts.Account Number");
+                    System.out.println("\nInvalid Account Number");
                 }
 
             }
