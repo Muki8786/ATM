@@ -40,6 +40,17 @@ public class AccountsDatabase {
             return false;
     }
 
+    public boolean accountCheck(int accountNumber)
+    {
+        for(Account currentAccount : accounts)
+        {
+            if (currentAccount.getAccountNumber() == accountNumber)
+                return true;
+        }
+        return false;
+
+    }
+
     public float getBalance(int userAccountNumber)
     {
         return getAccount(userAccountNumber).getBalance();
@@ -60,15 +71,8 @@ public class AccountsDatabase {
         return getAccount(userAccountNumber).getAdmin();
     }
 
-    public boolean accountCheck(int accountNumber)
-    {
-        for(Account currentAccount : accounts)
-        {
-            if (currentAccount.getAccountNumber() == accountNumber)
-                return true;
-        }
-        return false;
 
-    }
+
+
 
 }

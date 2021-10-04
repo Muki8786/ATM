@@ -487,14 +487,14 @@ public class Atm {
 
         while(true)
         {
-            System.out.println("\nPress 1 --- Continue to Transaction menu");
-            System.out.println("Press any other number key to exit");
+            System.out.println("\nPress 1 --- Continue to the menu");
+            System.out.print("Press any other number key to exit");
             try {
                 choice = input.nextInt();
                 break;
             } catch (InputMismatchException inputMismatchException)
             {
-                System.out.println("Enter a number!");
+                System.out.println("\nEnter a number!");
                 input.nextLine();
             }
         }
@@ -519,17 +519,22 @@ public class Atm {
         {
             DepositSlot.emptyDepositSlot();
         }
+        if(exitOrContinue() == 1)
+        {
+            createAdminMenu();
+        }
         else
         {
-           logout();
+            logout();
         }
+
     }
 
     public void displayAdminMenu()
     {
         System.out.println("\n\t\tHi "+ getAccount(currentAccountNumber).getUsername() + "!");
         System.out.println("\t\tPress 1 to fill cash into Dispenser");
-        System.out.println("\t\tPress 2 to empty cash from transactions.Deposit Slot");
+        System.out.println("\t\tPress 2 to empty cash from Deposit Slot");
         System.out.println("\t\tPress 0 to Exit");
     }
 
@@ -541,7 +546,13 @@ public class Atm {
             System.out.print("\n\t\tEnter your choice : ");
            try {
                choice = input.nextInt();
+               if(choice == 0 || choice == 1 || choice == 2)
                break;
+               else
+               {
+                   displayAdminMenu();
+                   continue;
+               }
            }
            catch (InputMismatchException inputMismatchException)
            {

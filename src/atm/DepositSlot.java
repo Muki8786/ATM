@@ -25,7 +25,7 @@ public class DepositSlot {
     public static void emptyDepositSlot()
     {
         depositBalance = 0;
-        System.out.println("\ntransactions.Deposit slot is empty now");
+        System.out.println("\nDeposit slot is empty now");
 
     }
 

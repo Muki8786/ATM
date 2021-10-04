@@ -22,7 +22,7 @@ public class Account {
         setAddress(address);
     }
 
-    public void setMobileNumber(String mobileNumber) {
+    private void setMobileNumber(String mobileNumber) {
         this.mobileNumber = mobileNumber;
     }
 
@@ -31,7 +31,7 @@ public class Account {
         return mobileNumber;
     }
 
-    public void setAddress(String address)
+    private void setAddress(String address)
     {
         this.address = address;
     }
@@ -46,7 +46,7 @@ public class Account {
         return username;
     }
 
-    public void setUsername(String username)
+    private void setUsername(String username)
     {
         this.username = username;
     }
@@ -56,7 +56,7 @@ public class Account {
         return accountNumber;
     }
 
-    public void setAccountNumber(int accountNumber)
+    private void setAccountNumber(int accountNumber)
     {
         this.accountNumber = accountNumber;
     }
@@ -71,7 +71,7 @@ public class Account {
         this.pin = pin;
     }
 
-    public void setBalance(float balance)
+    private void setBalance(float balance)
     {
         this.balance = balance;
     }
@@ -86,7 +86,7 @@ public class Account {
         return admin;
     }
 
-    public void setAdmin(int admin)
+    private void setAdmin(int admin)
     {
         this.admin = admin;
     }
