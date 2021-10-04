@@ -2,7 +2,6 @@ package atm;
 
 import accounts.*;
 import transactions.*;
-
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -210,6 +209,7 @@ public class Atm {
                 receiverAccountNumber = inputAccountNumber();
                 if(checkReceiver(receiverAccountNumber))
                 {
+                    fundTransfer = new FundTransfer(getAccount(currentAccountNumber) , getAccount(receiverAccountNumber));
                     int amount = getUserAmount();
                     if(amount != 0)
                     {
@@ -358,7 +358,7 @@ public class Atm {
     public int balanceAfterTransaction()
     {
         int balanceChoice = 0;
-        System.out.println("\n\t\taccounts.Transaction successful!\n");
+        System.out.println("\n\t\tTransaction successful!\n");
         System.out.println("\nTo see your balance on the screen ");
         while(true) {
             System.out.println("Press 1 to check your balance ");
@@ -395,7 +395,7 @@ public class Atm {
                 userAccountNumber = input.nextInt();
                 break;
             } catch (InputMismatchException inputMismatchException) {
-                System.out.println("\n\nThe accounts.Account number you have entered does not match");
+                System.out.println("\n\nThe Account number you have entered does not match");
                 System.out.println("\nTry again");
                 input.nextLine();
             }
@@ -465,8 +465,8 @@ public class Atm {
         int choice = 0;
         while(true)
         {
-            System.out.println("\n\t\tPress 1 --- Through transactions.Deposit");
-            System.out.println("\t\tPress 2 --- Through accounts.Account balance");
+            System.out.println("\n\t\tPress 1 --- Through Deposit");
+            System.out.println("\t\tPress 2 --- Through Account balance");
             System.out.println("\t\tPress 0 --- Exit");
             System.out.print("\nEnter your choice : ");
             try{

@@ -1,8 +1,5 @@
 package accounts;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Account {
 
     private String username;
@@ -94,7 +91,6 @@ public class Account {
         this.admin = admin;
     }
 
-
     public boolean validatePIN(int userPIN)
     {
         if (userPIN == getPin())
@@ -102,7 +98,6 @@ public class Account {
         else
             return false;
     }
-
 
     public void credit(float amount)
     {
@@ -113,7 +108,5 @@ public class Account {
     {
         setBalance(getBalance() - amount);
     }
-
-
 
 }
