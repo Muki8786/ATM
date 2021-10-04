@@ -152,16 +152,10 @@ public class Atm {
         {
             changePin = new ChangePin(getAccount(currentAccountNumber));
             int newPin = getNewPin();
-            if(newPin != 0)
-            {
-                if(changePin.changeUserPin(newPin))
-                {
+            if(newPin > 0) {
+                if (changePin.changeUserPin(newPin)) {
                     System.out.println("\n\t\tPin change successful");
                 }
-            }
-            else
-            {
-                System.out.println("\n\t\tPin cannot be set");
             }
             if(exitOrContinue() == 1)
             {
@@ -441,7 +435,7 @@ public class Atm {
                 break;
             } catch (InputMismatchException inputMismatchException)
             {
-                System.out.println("\n\nThe Pin you have entered cannot be set ");
+                System.out.println("\n\nSorry! , The Pin you have entered cannot be set ");
                 System.out.println("\nTry again");
                 input.nextLine();
             }
@@ -515,11 +509,15 @@ public class Atm {
 
         if(choice == 1)
         {
-            CashDispenser.fillCashDispenser();
+            System.out.println("\nPlease insert the cash in the dispenser");
+            new CashDispenser();
+            System.out.println("\n\t\tCash dispenser is filled");
         }
         else if(choice == 2)
         {
-            DepositSlot.emptyDepositSlot();
+            System.out.println("\nPlease take the cash");
+            new DepositSlot();
+            System.out.println("\n\t\tDeposit slot is empty");
         }
         if(exitOrContinue() == 1)
         {

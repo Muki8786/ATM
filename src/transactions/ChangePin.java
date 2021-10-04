@@ -16,7 +16,7 @@ public class ChangePin {
     {
         if(newPin == oldPin)
         {
-            System.out.println("\nNew Pin cannot be the same as Old Pin ");
+            System.out.println("\nSorry!, New Pin cannot be the same as Old Pin ");
             return false;
         }
         else
@@ -29,7 +29,7 @@ public class ChangePin {
     public boolean changeUserPin(int newPin)
     {
         int oldPin = account.getPin();
-        if(verifyOldPin(oldPin , newPin) == false)
+        if(!verifyOldPin(oldPin, newPin))
         {
             return false;
         }

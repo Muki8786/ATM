@@ -11,10 +11,7 @@ public class BalanceInquiry {
         this.account = account;
     }
 
-
     public void balanceInquiry() {
-       float balance = account.getBalance();
-
-        System.out.println("\nYour balance is : Rs." + balance);
+        System.out.println("\nYour balance is : Rs." + account.getBalance());
     }
 }
