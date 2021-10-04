@@ -6,6 +6,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Atm {
+
     private boolean userAuthenticated;
     private int currentAccountNumber;
 
@@ -488,7 +489,8 @@ public class Atm {
         while(true)
         {
             System.out.println("\nPress 1 --- Continue to the menu");
-            System.out.print("Press any other number key to exit");
+            System.out.println("Press any other number key to exit");
+            System.out.print("\nEnter your choice : ");
             try {
                 choice = input.nextInt();
                 break;
