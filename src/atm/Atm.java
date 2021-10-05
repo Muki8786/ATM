@@ -55,7 +55,7 @@ public class Atm {
     public boolean authenticate(int accountNumber , int pin)
     {
         userAuthenticated = accountsDatabase.authenticateUser(accountNumber,pin);
-        if(userAuthenticated == true)
+        if(userAuthenticated)
         {
             currentAccountNumber = accountNumber;
             return true;
