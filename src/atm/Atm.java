@@ -22,13 +22,13 @@ public class Atm {
 
     Scanner input = new Scanner(System.in);
 
-    public Atm(String atmName ,CashDispenser cashDispenser , DepositSlot depositSlot )
+    public Atm(String atmName )
     {
         this.atmName = atmName;
         userAuthenticated = false;
         currentAccountNumber = 0;
-        this.cashDispenser = cashDispenser;
-        this.depositSlot = depositSlot;
+        cashDispenser = new CashDispenser();
+        depositSlot = new DepositSlot();
         accountsDatabase = new AccountsDatabase();
     }
 
@@ -286,7 +286,7 @@ public class Atm {
     {
         System.out.println("\n\t\tThank you for using "+ atmName+" ATM");
         System.out.println("\t\tPlease sanitize your hands before leaving :) \n\n\n");
-        run();
+        //run();
     }
 
     public void displayMainMenu() {
