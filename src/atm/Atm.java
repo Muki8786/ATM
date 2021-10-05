@@ -518,6 +518,10 @@ public class Atm {
             new DepositSlot();
             System.out.println("\n\t\tDeposit slot is empty");
         }
+        else if(choice == 0)
+        {
+            logout();
+        }
         if(exitOrContinue() == 1)
         {
             createAdminMenu();
@@ -549,13 +553,14 @@ public class Atm {
                break;
                else
                {
+                   System.out.println("\nInvalid choice");
                    displayAdminMenu();
                    continue;
                }
            }
            catch (InputMismatchException inputMismatchException)
            {
-               System.out.println("\t\tInvalid choice");
+               System.out.println("\nInvalid choice");
                displayAdminMenu();
                input.nextLine();
            }
