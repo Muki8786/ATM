@@ -35,7 +35,11 @@ public class AccountsDatabase {
         if (userAccount != null)
             return userAccount.validatePIN(userPIN);
         else
+        {
+            System.out.println("\nInvalid account number");
             return false;
+        }
+
     }
 
     public boolean accountCheck(int accountNumber)

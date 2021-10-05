@@ -1,7 +1,7 @@
 package transactions;
 
-import accounts.*;
-import atm.*;
+import accounts.Account;
+import atm.CashDispenser;
 
 public class Withdrawal {
 

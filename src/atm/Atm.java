@@ -61,7 +61,6 @@ public class Atm {
             return true;
         }
         else{
-            System.out.println("Invalid Account number/Pin!");
             return false;
         }
     }

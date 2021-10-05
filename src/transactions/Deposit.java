@@ -1,7 +1,8 @@
 package transactions;
 
-import accounts.*;
-import atm.*;
+import accounts.Account;
+import atm.DepositSlot;
+
 
 public class Deposit {
     private Account account;

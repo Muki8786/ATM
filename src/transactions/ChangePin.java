@@ -1,6 +1,6 @@
 package transactions;
 
-import accounts.*;
+import accounts.Account;
 
 public class ChangePin {
 
