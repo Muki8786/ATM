@@ -9,7 +9,7 @@ public class Atm {
 
     private boolean userAuthenticated;
     private int currentAccountNumber;
-
+    private String atmName;
     private CashDispenser cashDispenser;
     private DepositSlot depositSlot;
     private AccountsDatabase accountsDatabase;
@@ -18,21 +18,23 @@ public class Atm {
     private Deposit deposit;
     private ChangePin changePin;
     private FundTransfer fundTransfer;
-    private static Atm uniqueInstance;
+    private int configChoice;
 
     Scanner input = new Scanner(System.in);
 
-    public Atm()
+    public Atm(String atmName ,CashDispenser cashDispenser , DepositSlot depositSlot )
     {
+        this.atmName = atmName;
         userAuthenticated = false;
         currentAccountNumber = 0;
-        cashDispenser = new CashDispenser();
-        depositSlot = new DepositSlot();
+        this.cashDispenser = cashDispenser;
+        this.depositSlot = depositSlot;
         accountsDatabase = new AccountsDatabase();
     }
 
     public void run()
     {
+
         if(login())
         {
            if(getAccount(currentAccountNumber).getAdmin() == 0)
@@ -48,7 +50,8 @@ public class Atm {
 
     public boolean login()
     {
-        System.out.println("\t\tWelcome!\n");
+        System.out.println("\t\tWelcome to "+atmName + "ATM\n");
+        getConfigChoice();
        return authenticate(inputAccountNumber() , inputPin());
     }
 
@@ -74,7 +77,7 @@ public class Atm {
         else if(choice == 1) {
             balanceInquiry = new BalanceInquiry(getAccount(currentAccountNumber));
             balanceInquiry.balanceInquiry();
-            if(exitOrContinue() == 1)
+            if(configChoice == 1)
             {
                 createMenu();
             }
@@ -94,7 +97,7 @@ public class Atm {
                     System.out.println("\n\t\tWithdrawal successful!\n");
                 }
             }
-            if(exitOrContinue() == 1)
+            if(configChoice == 1)
             {
                 createMenu();
             }
@@ -116,7 +119,7 @@ public class Atm {
                     System.out.println("\n\t\tWithdrawal successful!\n");
                 }
             }
-            if(exitOrContinue() == 1)
+            if(configChoice == 1 )
             {
                 createMenu();
             }
@@ -137,7 +140,7 @@ public class Atm {
                     System.out.println("\n\t\tDeposit successful!\n");
                 }
             }
-            if(exitOrContinue() == 1)
+            if(configChoice == 1)
             {
                 createMenu();
             }
@@ -156,7 +159,7 @@ public class Atm {
                     System.out.println("\n\t\tPin change successful");
                 }
             }
-            if(exitOrContinue() == 1)
+            if(configChoice == 1)
             {
                 createMenu();
             }
@@ -220,7 +223,7 @@ public class Atm {
                 System.out.println("Invalid choice");
             }
 
-            if(exitOrContinue() == 1)
+            if(configChoice == 1)
             {
                 createMenu();
             }
@@ -281,7 +284,7 @@ public class Atm {
 
     public void logout()
     {
-        System.out.println("\n\t\tThank you for using our ATM");
+        System.out.println("\n\t\tThank you for using "+ atmName+" ATM");
         System.out.println("\t\tPlease sanitize your hands before leaving :) \n\n\n");
         run();
     }
@@ -373,12 +376,14 @@ public class Atm {
 
     }
 
-    public static Atm getInstance() {
+    /*public static Atm getInstance() {
         if (uniqueInstance == null) {
             uniqueInstance = new Atm();
         }
         return uniqueInstance;
     }
+
+     */
 
     public int inputAccountNumber()
     {
@@ -444,14 +449,7 @@ public class Atm {
 
     public boolean checkReceiver(int receiverAccountNumber)
     {
-        if(accountsDatabase.accountCheck(receiverAccountNumber))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return accountsDatabase.accountCheck(receiverAccountNumber);
     }
 
     public int getInputFundTransferMenu()
@@ -509,13 +507,13 @@ public class Atm {
         if(choice == 1)
         {
             System.out.println("\nPlease insert the cash in the dispenser");
-            new CashDispenser();
+            cashDispenser.insertIntoDispenser();
             System.out.println("\n\t\tCash dispenser is filled");
         }
         else if(choice == 2)
         {
             System.out.println("\nPlease take the cash");
-            new DepositSlot();
+            depositSlot.withdrawFromDepositSlot();
             System.out.println("\n\t\tDeposit slot is empty");
         }
         else if(choice == 0)
@@ -555,7 +553,6 @@ public class Atm {
                {
                    System.out.println("\nInvalid choice");
                    displayAdminMenu();
-                   continue;
                }
            }
            catch (InputMismatchException inputMismatchException)
@@ -568,4 +565,33 @@ public class Atm {
         return choice;
     }
 
+    public void getConfigChoice()
+    {
+        int choice =0;
+        System.out.println("\nPress 1 to redirect to main menu after a transaction");
+        System.out.println("Press any other number key to exit immediately after transaction");
+        while(true)
+        {
+            System.out.print("\nEnter your Choice : ");
+            try
+            {
+                choice = input.nextInt();
+                break;
+            }
+            catch (InputMismatchException inputMismatchException)
+            {
+                input.nextLine();
+                choice = 0;
+                break;
+            }
+        }
+        if(choice == 1)
+        {
+           configChoice = choice;
+        }
+        else
+        {
+            configChoice = 0;
+        }
+    }
 }

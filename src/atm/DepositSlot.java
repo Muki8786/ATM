@@ -1,10 +1,10 @@
 package atm;
 
 public class DepositSlot {
-    private static int depositBalance;
+    private int depositBalance;
     private static final int depositCapacity = 100000;
 
-    DepositSlot()
+    public DepositSlot()
     {
         depositBalance = 0;
     }
@@ -22,4 +22,8 @@ public class DepositSlot {
             return true;
     }
 
+    public void withdrawFromDepositSlot()
+    {
+        depositBalance = 0;
+    }
 }

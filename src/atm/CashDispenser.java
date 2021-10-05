@@ -2,9 +2,9 @@ package atm;
 
 public class CashDispenser {
     private static final int initialBalance = 100000;
-    private static int balance;
+    private int balance;
 
-    CashDispenser()
+    public CashDispenser()
     {
         balance = initialBalance;
     }
@@ -23,6 +23,11 @@ public class CashDispenser {
         }
         else
             return true;
+    }
+
+    public void insertIntoDispenser()
+    {
+        balance = initialBalance;
     }
 
 }
