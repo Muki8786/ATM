@@ -97,7 +97,7 @@ public class Account {
             return true;
         else
         {
-            System.out.println("\nSorry! Pin is not matched");
+            System.out.println("\nSorry! Incorrect Pin");
             return false;
         }
     }

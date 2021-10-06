@@ -1,6 +1,8 @@
 package atm;
 
 import accounts.*;
+import bank.AdminCashier;
+import bank.AdminLog;
 import transactions.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -50,9 +52,21 @@ public class Atm {
 
     public boolean login()
     {
-        System.out.println("\t\tWelcome to "+atmName + "ATM\n");
+        System.out.println("\n\t\tWelcome to "+atmName + "ATM\n");
         getConfigChoice();
-       return authenticate(inputAccountNumber() , inputPin());
+
+        int accountNumber = inputAccountNumber();
+        if(accountsDatabase.accountCheck(accountNumber))
+        {
+            int pin = inputPin();
+            return authenticate(accountNumber, pin);
+        }
+        else
+        {
+            System.out.println("\nNo account found ");
+            return false;
+        }
+
     }
 
     public boolean authenticate(int accountNumber , int pin)
@@ -506,26 +520,37 @@ public class Atm {
 
         if(choice == 1)
         {
-            System.out.println("\nPlease insert the cash in the dispenser");
-            cashDispenser.insertIntoDispenser();
-            System.out.println("\n\t\tCash dispenser is filled");
+            int amount = cashDispenser.getAmount();
+            if(amount !=0)
+            {
+                if(AdminCashier.balanceCheck(amount))
+                {
+                AdminCashier.debitBankBalance(amount);
+                System.out.println("\nPlease insert the cash in the dispenser");
+                cashDispenser.insertIntoDispenser(amount);
+                AdminLog adminLog = new AdminLog(getAccount(currentAccountNumber).getUsername() ,atmName,"Filling" , amount);
+                AdminCashier.addAdminLog(adminLog);
+                }
+                System.out.println("\n\t\tCash dispenser is full");
+            }
         }
         else if(choice == 2)
         {
-            System.out.println("\nPlease take the cash");
-            depositSlot.withdrawFromDepositSlot();
+            int amount = depositSlot.getAmount();
+            if(amount != 0) {
+                System.out.println("\nPlease take the cash");
+                depositSlot.withdrawFromDepositSlot();
+                AdminCashier.creditBankBalance(amount);
+                AdminLog adminLog = new AdminLog(getAccount(currentAccountNumber).getUsername() ,atmName,"Emptying" , amount);
+                AdminCashier.addAdminLog(adminLog);
+            }
             System.out.println("\n\t\tDeposit slot is empty");
         }
-        else if(choice == 0)
-        {
-            logout();
-        }
-        if(exitOrContinue() == 1)
+        if(choice != 0 && configChoice == 1)
         {
             createAdminMenu();
         }
-        else
-        {
+        else {
             logout();
         }
 
@@ -568,8 +593,8 @@ public class Atm {
     public void getConfigChoice()
     {
         int choice =0;
-        System.out.println("\nPress 1 to redirect to main menu after a transaction");
-        System.out.println("Press any other number key to exit immediately after transaction");
+        System.out.println("Press 1 to redirect to main menu after a Transaction");
+        System.out.println("Press any other key to exit immediately after a Transaction");
         while(true)
         {
             System.out.print("\nEnter your Choice : ");

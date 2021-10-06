@@ -40,7 +40,6 @@ public class AccountsDatabase {
             return userAccount.validatePIN(userPIN);
         else
         {
-            System.out.println("\nInvalid account number");
             return false;
         }
 

@@ -26,4 +26,12 @@ public class DepositSlot {
     {
         depositBalance = 0;
     }
+
+    public int getAmount()
+    {
+        int amount = depositBalance ;
+        System.out.println("\nThe amount to be taken is Rs."+ amount);
+        return amount;
+    }
+
 }

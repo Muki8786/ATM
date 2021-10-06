@@ -25,9 +25,17 @@ public class CashDispenser {
             return true;
     }
 
-    public void insertIntoDispenser()
+    public int getAmount()
     {
-        balance = initialBalance;
+        int amount = initialBalance-balance;
+        System.out.println("\nThe amount needed to be full is Rs."+ amount);
+        return amount;
     }
+
+    public void insertIntoDispenser(int amount)
+    {
+        balance += amount;
+    }
+
 
 }
