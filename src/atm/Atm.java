@@ -39,7 +39,7 @@ public class Atm {
 
         if(login())
         {
-           if(getAccount(currentAccountNumber).getAdmin() == 0)
+           if(!getAccount(currentAccountNumber).getAdmin())
                createMenu();
            else
                createAdminMenu();

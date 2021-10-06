@@ -8,10 +8,10 @@ public class Account {
     private String  mobileNumber;
     private String address;
     private float balance;
-    private int admin;
+    private boolean admin;
 
 
-    public Account(String Username, int accountNumber, String mobileNumber , String address , int pin , float balance, int admin)
+    public Account(String Username, int accountNumber, String mobileNumber , String address , int pin , float balance, boolean admin)
     {
         setUsername(Username);
         setAccountNumber(accountNumber);
@@ -81,12 +81,12 @@ public class Account {
         return balance;
     }
 
-    public int getAdmin()
+    public boolean getAdmin()
     {
         return admin;
     }
 
-    private void setAdmin(int admin)
+    private void setAdmin(boolean admin)
     {
         this.admin = admin;
     }
