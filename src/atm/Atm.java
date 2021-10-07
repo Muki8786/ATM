@@ -20,7 +20,12 @@ public class Atm {
     private Deposit deposit;
     private ChangePin changePin;
     private FundTransfer fundTransfer;
-    private int configChoice;
+    private static int configChoice = 1;
+    private static int depositAmount;
+    private static int hun;
+    private static int twoHun;
+    private static int fiveHun;
+    private static int twoThous;
 
     Scanner input = new Scanner(System.in);
 
@@ -32,6 +37,11 @@ public class Atm {
         cashDispenser = new CashDispenser();
         depositSlot = new DepositSlot();
         accountsDatabase = new AccountsDatabase();
+        depositAmount = 280000;
+        hun = 100;
+        twoHun = 100;
+        fiveHun = 100;
+        twoThous = 100;
     }
 
     public void run()
@@ -53,7 +63,7 @@ public class Atm {
     public boolean login()
     {
         System.out.println("\n\t\tWelcome to "+atmName + "ATM\n");
-        getConfigChoice();
+        //getConfigChoice();
 
         int accountNumber = inputAccountNumber();
         if(accountsDatabase.accountCheck(accountNumber))
@@ -87,7 +97,10 @@ public class Atm {
         displayMainMenu();
         int choice = getInputMainMenu();
         if(choice == -1)
+        {
             createMenu();
+            //logout();
+        }
         else if(choice == 1) {
             balanceInquiry = new BalanceInquiry(getAccount(currentAccountNumber));
             balanceInquiry.balanceInquiry();
@@ -127,7 +140,9 @@ public class Atm {
             withdrawal = new Withdrawal(getAccount(currentAccountNumber), cashDispenser);
 
             int amount = displayFastCashMenu();
-            if(amount > 0)
+            if(amount == -1)
+                logout();
+            else if(amount > 0)
             {
                 if(withdrawal.withdraw(amount))
                 {
@@ -196,7 +211,9 @@ public class Atm {
 
             int inputChoice = 0;
             inputChoice = getInputFundTransferMenu();
-            if(inputChoice == 1)
+            if(inputChoice == -1)
+                logout();
+            else if(inputChoice == 1)
             {
                 int receiverAccountNumber = 0;
                 System.out.println("\nPlease provide the Receiver's details");
@@ -246,10 +263,12 @@ public class Atm {
                     System.out.println("Invalid account number");
                 }
             }
-            else if(inputChoice != 0)
+            /*else if(inputChoice != 0)
             {
                 System.out.println("Invalid choice");
             }
+
+             */
 
             if(configChoice == 1)
             {
@@ -299,22 +318,35 @@ public class Atm {
                     System.out.println("Invalid Input!");
                     System.out.println("Press 0 to exit\n\n");
                     input.nextLine();
+                    break;
                 }
         }
-        if(choice > 4 || choice < 0)
+        if(choice>=0 && choice<=4)
+        {
+            return amount;
+        }
+        else
+        {
+            return -1;
+        }
+
+
+        /*if(choice > 4 || choice < 0)
         {
             System.out.println("Invalid choice!");
             return 0;
         }
         else
             return amount;
+
+         */
     }
 
     public void logout()
     {
         System.out.println("\n\t\tThank you for using "+ atmName+" ATM");
         System.out.println("\t\tPlease sanitize your hands before leaving :) \n\n\n");
-        //run();
+        run();
     }
 
     public void displayMainMenu() {
@@ -344,15 +376,23 @@ public class Atm {
                 System.out.println("\nYour input is mismatched");
                 System.out.println("Try again!");
                 input.nextLine();
+                break;
             }
         }
-        if(choice > 6 || choice < 0)
+        if(choice>=0 && choice <=6)
+            return choice;
+        else
+            return -1;
+
+        /*if(choice > 6 || choice < 0)
         {
             System.out.println("Invalid choice!");
             return -1;
         }
         else
             return choice;
+
+         */
     }
 
     public int getUserAmount() {
@@ -496,9 +536,15 @@ public class Atm {
             {
                 System.out.println("Invalid choice!");
                 input.nextLine();
+                break;
             }
         }
-        return choice;
+        if(choice>=0 && choice<=2)
+        {
+            return choice;
+        }
+        else
+            return -1;
     }
 
     public int exitOrContinue()
@@ -534,15 +580,15 @@ public class Atm {
 
         if(choice == 1)
         {
-            int amount = cashDispenser.getAmount();
-            if(amount !=0)
+            //int amount = cashDispenser.getAmount();
+            if(depositAmount !=0)
             {
-                if(AdminCashier.balanceCheck(amount))
+                if(AdminCashier.balanceCheck(depositAmount))
                 {
-                AdminCashier.debitBankBalance(amount);
+                AdminCashier.debitBankBalance(depositAmount);
                 System.out.println("\nPlease insert the cash in the dispenser");
-                cashDispenser.insertIntoDispenser(amount);
-                AdminLog adminLog = new AdminLog(getAccount(currentAccountNumber).getUsername() ,atmName,"Filling" , amount);
+                cashDispenser.insertIntoDispenser(depositAmount,hun,twoHun,fiveHun,twoThous);
+                AdminLog adminLog = new AdminLog(getAccount(currentAccountNumber).getUsername() ,atmName,"Filling" , depositAmount);
                 AdminCashier.addAdminLog(adminLog);
                 }
                 System.out.println("\n\t\tCash dispenser is full");
@@ -551,6 +597,8 @@ public class Atm {
         else if(choice == 2)
         {
             int amount = depositSlot.getAmount();
+            depositAmount = amount;
+            setCount();
             if(amount != 0) {
                 System.out.println("\nPlease take the cash");
                 depositSlot.withdrawFromDepositSlot();
@@ -562,6 +610,7 @@ public class Atm {
         }
         if(choice != 0 && configChoice == 1)
         {
+            AdminCashier.printAdminLog();
             createAdminMenu();
         }
         else {
@@ -597,7 +646,7 @@ public class Atm {
            catch (InputMismatchException inputMismatchException)
            {
                System.out.println("\nInvalid choice");
-               displayAdminMenu();
+               //displayAdminMenu();
                input.nextLine();
            }
         }
@@ -669,5 +718,13 @@ public class Atm {
             System.out.println("\n\t\tCheck the denominations with the amount");
             return false;
         }
+    }
+
+    public void setCount()
+    {
+        hun = depositSlot.getDenominationCount(100);
+        twoHun = depositSlot.getDenominationCount(200);
+        fiveHun = depositSlot.getDenominationCount(500);
+        twoThous = depositSlot.getDenominationCount(2000);
     }
 }

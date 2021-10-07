@@ -5,13 +5,18 @@ public class StartAtm {
     public static void main(String args[])
     {
         Atm atm = new Atm("FIRST ");
-        Atm atm1 = new Atm("SECOND ");
         atm.run();
-        atm.run();
+        /*Atm atm1 = new Atm("SECOND ");
+        Atm atm2 = new Atm("Three");
+
 
         atm1.run();
-        atm1.run();
 
-        AdminCashier.printAdminLog();
+
+        atm2.run();
+
+         */
+
+        //AdminCashier.printAdminLog();
     }
 }

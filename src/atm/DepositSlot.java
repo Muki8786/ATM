@@ -9,7 +9,6 @@ public class DepositSlot {
     {
         depositBalance = 0;
         denomination = new Denomination(0);
-
     }
 
     public void acceptCash(int amount, int hun , int twoHun , int fiveHun , int twoThous)
@@ -92,6 +91,11 @@ public class DepositSlot {
         int amount = depositBalance ;
         System.out.println("\nThe amount to be taken is Rs."+ amount);
         return amount;
+    }
+
+    public int getDenominationCount(int key)
+    {
+        return denomination.getCount(key);
     }
 
 }

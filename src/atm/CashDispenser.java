@@ -32,7 +32,7 @@ public class CashDispenser {
         }
         else if(amount > balance)
         {
-            System.out.println("\n\t\tInsufficient Funds! Enter lesser amount");
+            System.out.println("\n\t\tInsufficient Funds!");
             return false;
         }
         else if(amount % 100 != 0)
@@ -53,10 +53,10 @@ public class CashDispenser {
         return amount;
     }
 
-    public void insertIntoDispenser(int amount)
+    public void insertIntoDispenser(int amount , int hun , int twoHun, int fiveHun , int twoThous)
     {
         balance += amount;
-        denomination.addAllDenominations(100,100,100,100);
+        denomination.addAllDenominations(hun,twoHun,fiveHun,twoThous);
     }
 
     public boolean withdrawWithCount(int amount)
