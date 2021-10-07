@@ -24,15 +24,10 @@ public class Withdrawal {
 
                 account.debit(amount);
 
-                cashDispenser.dispenseCash(amount);
-
                 return true;
                 }
             else
-            {
-                System.out.println("\nSorry! Unable to withdraw! Insufficient funds at the atm!");
                 return false;
-            }
         }
         else
         {

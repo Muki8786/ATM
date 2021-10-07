@@ -104,6 +104,7 @@ public class Atm {
         else if (choice == 2) {
             withdrawal = new Withdrawal(getAccount(currentAccountNumber), cashDispenser);
 
+            cashDispenser.denominationsAvailable();
             int amount = getUserAmount();
             if(amount != 0)
             {
@@ -147,9 +148,15 @@ public class Atm {
         {
             deposit = new Deposit(getAccount(currentAccountNumber), depositSlot);
             int amount = getUserAmount();
-            if(amount > 0)
+
+            int hun = getCount(100);
+            int twoHun = getCount(200);
+            int fiveHun = getCount(500);
+            int twoThous = getCount(2000);
+
+            if(amount > 0 && initiateDeposit(amount,hun,twoHun,fiveHun,twoThous))
             {
-                if(deposit.depositCash(amount))
+                if(deposit.depositCash(amount,hun , twoHun , fiveHun , twoThous))
                 {
                     System.out.println("\n\t\tDeposit successful!\n");
                 }
@@ -162,6 +169,7 @@ public class Atm {
             {
                 logout();
             }
+
         }
 
         else if(choice == 5)
@@ -199,9 +207,15 @@ public class Atm {
                     fundTransfer = new FundTransfer(getAccount(currentAccountNumber) , getAccount(receiverAccountNumber));
                     deposit = new Deposit(getAccount(currentAccountNumber), depositSlot);
                     int amount = getUserAmount();
-                    if(amount !=0)
+                    int hun = getCount(100);
+                    int twoHun = getCount(200);
+                    int fiveHun = getCount(500);
+                    int twoThous = getCount(2000);
+
+
+                    if(amount !=0 && initiateDeposit(amount,hun,twoHun,fiveHun,twoThous))
                     {
-                        if(deposit.depositCash(amount)) {
+                        if(deposit.depositCash(amount,hun , twoHun , fiveHun , twoThous)) {
                             fundTransfer.transferFund(amount);
                         }
                     }
@@ -617,6 +631,43 @@ public class Atm {
         else
         {
             configChoice = 0;
+        }
+    }
+
+    public int getCount(int key)
+    {
+        int count = 0;
+
+        while (true)
+        {
+            System.out.println("\nEnter the count of Rs."+key+" notes : ");
+            try
+            {
+                count = input.nextInt();
+                if(count >= 0)
+                break;
+            }
+            catch (InputMismatchException inputMismatchException)
+            {
+                System.out.println("\nInvalid input");
+                input.nextLine();
+            }
+
+        }
+        return count;
+    }
+
+    public boolean initiateDeposit(int amount , int hun , int twoHun, int fiveHun , int twoThous)
+    {
+        int sum = (hun *100) + (twoHun*200) + (fiveHun*500) + (twoThous*2000);
+        if(amount == sum)
+        {
+            return true;
+        }
+        else
+        {
+            System.out.println("\n\t\tCheck the denominations with the amount");
+            return false;
         }
     }
 }
