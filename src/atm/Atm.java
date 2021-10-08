@@ -96,10 +96,16 @@ public class Atm {
     {
         displayMainMenu();
         int choice = getInputMainMenu();
-        if(choice == -1)
+        if(choice == -1 )
         {
-            createMenu();
-            //logout();
+            if(configChoice == 1)
+            {
+                createMenu();
+            }
+            else
+            {
+                logout();
+            }
         }
         else if(choice == 1) {
             balanceInquiry = new BalanceInquiry(getAccount(currentAccountNumber));
@@ -116,13 +122,13 @@ public class Atm {
 
         else if (choice == 2) {
             withdrawal = new Withdrawal(getAccount(currentAccountNumber), cashDispenser);
-
-            cashDispenser.denominationsAvailable();
-            int amount = getUserAmount();
-            if(amount != 0)
-            {
-                if (withdrawal.withdraw(amount)) {
-                    System.out.println("\n\t\tWithdrawal successful!\n");
+            if(withdrawal.withdrawCheck()) {
+                cashDispenser.denominationsAvailable();
+                int amount = getUserAmount();
+                if (amount != 0) {
+                    if (withdrawal.withdraw(amount)) {
+                        System.out.println("\n\t\tWithdrawal successful!\n");
+                    }
                 }
             }
             if(configChoice == 1)
@@ -139,14 +145,14 @@ public class Atm {
         {
             withdrawal = new Withdrawal(getAccount(currentAccountNumber), cashDispenser);
 
-            int amount = displayFastCashMenu();
-            if(amount == -1)
-                logout();
-            else if(amount > 0)
-            {
-                if(withdrawal.withdraw(amount))
-                {
-                    System.out.println("\n\t\tWithdrawal successful!\n");
+            if(withdrawal.withdrawCheck()) {
+                int amount = displayFastCashMenu();
+                if (amount == -1 && configChoice != 1)
+                    logout();
+                else if (amount > 0) {
+                    if (withdrawal.withdraw(amount)) {
+                        System.out.println("\n\t\tWithdrawal successful!\n");
+                    }
                 }
             }
             if(configChoice == 1 )
@@ -163,11 +169,14 @@ public class Atm {
         {
             deposit = new Deposit(getAccount(currentAccountNumber), depositSlot);
             int amount = getUserAmount();
-
-            int hun = getCount(100);
-            int twoHun = getCount(200);
-            int fiveHun = getCount(500);
-            int twoThous = getCount(2000);
+            if(amount == 0 && configChoice != 1)
+                logout();
+            else {
+                int hun = getCount(100);
+                int twoHun = getCount(200);
+                int fiveHun = getCount(500);
+                int twoThous = getCount(2000);
+            }
 
             if(amount > 0 && initiateDeposit(amount,hun,twoHun,fiveHun,twoThous))
             {
@@ -303,22 +312,30 @@ public class Atm {
 
                 if (choice == 1) {
                     amount = 500;
+                    break;
                 } else if (choice == 2) {
                     amount = 1000;
+                    break;
                 } else if (choice == 3) {
                     amount = 5000;
+                    break;
                 } else if (choice == 4) {
                     amount = 10000;
+                    break;
                 } else if(choice == 0) {
                     amount = 0;
+                    break;
                 }
+                System.out.println("\nInvalid Input!");
+                if(configChoice != 1)
                 break;
                 } catch (InputMismatchException inputMismatchException)
                 {
-                    System.out.println("Invalid Input!");
-                    System.out.println("Press 0 to exit\n\n");
+                    System.out.println("\nInvalid Input!");
+
                     input.nextLine();
-                    break;
+                    if(configChoice != 1)
+                        break;
                 }
         }
         if(choice>=0 && choice<=4)
@@ -327,6 +344,7 @@ public class Atm {
         }
         else
         {
+            System.out.println("\nInvalid Input!");
             return -1;
         }
 
@@ -374,16 +392,17 @@ public class Atm {
             catch (InputMismatchException inputMismatchException)
             {
                 System.out.println("\nYour input is mismatched");
-                System.out.println("Try again!");
                 input.nextLine();
+                if(configChoice!=1)
                 break;
             }
         }
         if(choice>=0 && choice <=6)
             return choice;
-        else
+        else {
+            System.out.println("\nYour input is mismatched");
             return -1;
-
+        }
         /*if(choice > 6 || choice < 0)
         {
             System.out.println("Invalid choice!");
@@ -404,17 +423,27 @@ public class Atm {
             try
             {
                 userAmount = input.nextInt();
-                if(userAmount<0)
+                if(userAmount<0 && configChoice == 1)
                 {
                     System.out.println("Amount cannot be negative");
                     continue;
+                }
+                else if(userAmount<0)
+                {
+                    System.out.println("Amount cannot be negative");
+                    userAmount =0;
                 }
                 break;
             }
             catch (InputMismatchException inputMismatchException)
             {
-                System.out.println("Your input cannot be processed");
+                System.out.println("\nYour input cannot be processed");
                 input.nextLine();
+                if(configChoice!=1)
+                {
+                    userAmount = 0;
+                    break;
+                }
             }
         }
         return userAmount;
@@ -484,6 +513,11 @@ public class Atm {
                 System.out.println("\n\nThe Pin you have entered does not match");
                 System.out.println("\nTry again");
                 input.nextLine();
+                if(configChoice!=1)
+                {
+                    userPin = -1;
+                    break;
+                }
             }
         }
         return userPin;
@@ -499,17 +533,26 @@ public class Atm {
             try
             {
                 newPin = input.nextInt();
-                if(newPin < 0)
+                if(newPin < 0 && configChoice == 1)
                 {
                     System.out.println("Pin cannot be negative");
                     continue;
+                }
+                else if(newPin < 0)
+                {
+                    System.out.println("Pin cannot be negative");
+                    newPin = 0;
                 }
                 break;
             } catch (InputMismatchException inputMismatchException)
             {
                 System.out.println("\n\nSorry! , The Pin you have entered cannot be set ");
-                System.out.println("\nTry again");
                 input.nextLine();
+                if(configChoice !=1)
+                {
+                    newPin = 0;
+                    break;
+                }
             }
         }
         return newPin;
@@ -531,21 +574,35 @@ public class Atm {
             System.out.print("\nEnter your choice : ");
             try{
                 choice = input.nextInt();
+                if(choice == 1 || choice == 2 || choice == 0)
+                {
+                    break;
+                }
+                if(configChoice == 1)
+                {
+                    System.out.println("Invalid choice!");
+                    continue;
+                }
+                choice = 0;
+                System.out.println("Invalid choice!");
                 break;
+
             } catch (InputMismatchException inputMismatchException)
             {
                 System.out.println("Invalid choice!");
                 input.nextLine();
-                break;
+                if(configChoice!=1)
+                {
+                    choice= 0;
+                    break;
+                }
             }
         }
-        if(choice>=0 && choice<=2)
-        {
-            return choice;
-        }
-        else
-            return -1;
+        return choice;
+
+
     }
+
 
     public int exitOrContinue()
     {
@@ -590,8 +647,10 @@ public class Atm {
                 cashDispenser.insertIntoDispenser(depositAmount,hun,twoHun,fiveHun,twoThous);
                 AdminLog adminLog = new AdminLog(getAccount(currentAccountNumber).getUsername() ,atmName,"Filling" , depositAmount);
                 AdminCashier.addAdminLog(adminLog);
+
                 }
-                System.out.println("\n\t\tCash dispenser is full");
+                System.out.println("\n\t\tCash dispenser is filled");
+                AdminCashier.printAdminLog();
             }
         }
         else if(choice == 2)
@@ -605,12 +664,13 @@ public class Atm {
                 AdminCashier.creditBankBalance(amount);
                 AdminLog adminLog = new AdminLog(getAccount(currentAccountNumber).getUsername() ,atmName,"Emptying" , amount);
                 AdminCashier.addAdminLog(adminLog);
+
             }
             System.out.println("\n\t\tDeposit slot is empty");
+            AdminCashier.printAdminLog();
         }
         if(choice != 0 && configChoice == 1)
         {
-            AdminCashier.printAdminLog();
             createAdminMenu();
         }
         else {
@@ -632,25 +692,27 @@ public class Atm {
         int choice = 0;
         while(true)
         {
-            System.out.print("\n\t\tEnter your choice : ");
-           try {
-               choice = input.nextInt();
-               if(choice == 0 || choice == 1 || choice == 2)
-               break;
-               else
-               {
-                   System.out.println("\nInvalid choice");
-                   displayAdminMenu();
-               }
-           }
-           catch (InputMismatchException inputMismatchException)
-           {
-               System.out.println("\nInvalid choice");
-               //displayAdminMenu();
-               input.nextLine();
-           }
+            System.out.print("\nEnter your Choice : ");
+            try
+            {
+                choice = input.nextInt();
+                break;
+            }
+            catch (InputMismatchException inputMismatchException)
+            {
+                System.out.println("\nYour input is mismatched");
+                input.nextLine();
+                if(configChoice!=1)
+                    break;
+            }
         }
-        return choice;
+        if(choice>=0 && choice <=2)
+            return choice;
+        else {
+            System.out.println("\nYour input is mismatched");
+            return -1;
+        }
+
     }
 
     public void getConfigChoice()
@@ -693,13 +755,20 @@ public class Atm {
             try
             {
                 count = input.nextInt();
-                if(count >= 0)
+                if(count >= 0 && configChoice ==1)
                 break;
+
             }
             catch (InputMismatchException inputMismatchException)
             {
                 System.out.println("\nInvalid input");
                 input.nextLine();
+
+                if(configChoice!=1)
+                {
+                    count = 0;
+                    break;
+                }
             }
 
         }
@@ -708,6 +777,7 @@ public class Atm {
 
     public boolean initiateDeposit(int amount , int hun , int twoHun, int fiveHun , int twoThous)
     {
+        System.out.println(amount+ " "+ hun+ " "+ twoHun + " "+ fiveHun + " "+ twoThous);
         int sum = (hun *100) + (twoHun*200) + (fiveHun*500) + (twoThous*2000);
         if(amount == sum)
         {

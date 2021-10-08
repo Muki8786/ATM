@@ -21,12 +21,7 @@ public class CashDispenser {
 
     public boolean sufficientATMBalanceCheck(int amount)
     {
-        if(balance == 0)
-        {
-            System.out.println("\n\t\tSorry! No cash in ATM");
-            return false;
-        }
-        else if(amount <= balance && (amount % 100 == 0) )
+        if(amount <= balance && (amount % 100 == 0) )
         {
             return withdrawWithCount(amount);
         }
@@ -87,7 +82,7 @@ public class CashDispenser {
                 fiveHun--;
                 fiveHunCount++;
             }
-            else if(amount >=200 && twoHun>0)
+            else if((amount >200 && twoHun>0) || (amount == 200 && (hun < 2) && twoHun>0))
             {
                 amount -= 200;
                 twoHun--;
@@ -145,6 +140,11 @@ public class CashDispenser {
             System.out.println("100");
         }
         System.out.println();
+    }
+
+    public int getBalance()
+    {
+        return balance;
     }
 
 }

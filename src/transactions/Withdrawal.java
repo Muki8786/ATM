@@ -36,4 +36,15 @@ public class Withdrawal {
         }
     }
 
+    public boolean withdrawCheck()
+    {
+        float balance = cashDispenser.getBalance();
+        if(balance == 0)
+        {
+            System.out.println("\n\t\tSorry! No cash in ATM");
+            return false;
+        }
+        return true;
+    }
+
 }
