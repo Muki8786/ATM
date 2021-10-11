@@ -37,11 +37,6 @@ public class Atm {
         cashDispenser = new CashDispenser();
         depositSlot = new DepositSlot();
         accountsDatabase = new AccountsDatabase();
-        depositAmount = 280000;
-        hun = 100;
-        twoHun = 100;
-        fiveHun = 100;
-        twoThous = 100;
     }
 
     public void run()
@@ -167,20 +162,21 @@ public class Atm {
 
         else if(choice == 4)
         {
+            int hunCount =0,twoHunCount =0,fiveHunCount =0 , twoThousCount =0;
             deposit = new Deposit(getAccount(currentAccountNumber), depositSlot);
             int amount = getUserAmount();
             if(amount == 0 && configChoice != 1)
                 logout();
             else {
-                int hun = getCount(100);
-                int twoHun = getCount(200);
-                int fiveHun = getCount(500);
-                int twoThous = getCount(2000);
+                hunCount = getCount(100);
+                twoHunCount = getCount(200);
+                fiveHunCount = getCount(500);
+                twoThousCount = getCount(2000);
             }
 
-            if(amount > 0 && initiateDeposit(amount,hun,twoHun,fiveHun,twoThous))
+            if(amount > 0 && initiateDeposit(amount,hunCount,twoHunCount,fiveHunCount,twoThousCount))
             {
-                if(deposit.depositCash(amount,hun , twoHun , fiveHun , twoThous))
+                if(deposit.depositCash(amount,hunCount , twoHunCount , fiveHunCount , twoThousCount))
                 {
                     System.out.println("\n\t\tDeposit successful!\n");
                 }
@@ -637,21 +633,38 @@ public class Atm {
 
         if(choice == 1)
         {
-            //int amount = cashDispenser.getAmount();
-            if(depositAmount !=0)
-            {
-                if(AdminCashier.balanceCheck(depositAmount))
-                {
-                AdminCashier.debitBankBalance(depositAmount);
-                System.out.println("\nPlease insert the cash in the dispenser");
-                cashDispenser.insertIntoDispenser(depositAmount,hun,twoHun,fiveHun,twoThous);
-                AdminLog adminLog = new AdminLog(getAccount(currentAccountNumber).getUsername() ,atmName,"Filling" , depositAmount);
-                AdminCashier.addAdminLog(adminLog);
+            int hunCount =0,twoHunCount=0,fiveHunCount=0,twoThousCount=0,amount=0;
 
-                }
-                System.out.println("\n\t\tCash dispenser is filled");
-                AdminCashier.printAdminLog();
+
+            int depositChoice = getDepositChoice();
+            if(depositChoice == 0)
+                logout();
+            else if(depositChoice == 1) {
+                depositAmount = cashDispenser.getAmount();
+                hun = cashDispenser.denominationCountNeeded(100);
+                twoHun = cashDispenser.denominationCountNeeded(200);
+                fiveHun = cashDispenser.denominationCountNeeded(500);
+                twoThous = cashDispenser.denominationCountNeeded(2000);
             }
+
+
+            if (depositAmount != 0) {
+                    if (AdminCashier.balanceCheck(depositAmount) && cashDispenser.denominationsCheck(100,hun)
+                    && cashDispenser.denominationsCheck(200 , twoHun) && cashDispenser.denominationsCheck(500 , fiveHun)
+                    && cashDispenser.denominationsCheck(2000,twoThous)) {
+                        AdminCashier.debitBankBalance(amount);
+                        System.out.println("\nPlease insert the cash in the dispenser");
+                        if(depositChoice == 1)
+                            cashDispenser.insertIntoDispenser(depositAmount, 100, 100, 100, 100);
+                        else
+                            cashDispenser.insertIntoDispenser(depositAmount, hun, twoHun, fiveHun, twoThous);
+                        AdminLog adminLog = new AdminLog(getAccount(currentAccountNumber).getUsername(), atmName, "Filling", depositAmount);
+                        AdminCashier.addAdminLog(adminLog);
+                        System.out.println("\n\t\tCash dispenser is filled");
+
+                    }
+                    AdminCashier.printAdminLog();
+                }
         }
         else if(choice == 2)
         {
@@ -664,7 +677,6 @@ public class Atm {
                 AdminCashier.creditBankBalance(amount);
                 AdminLog adminLog = new AdminLog(getAccount(currentAccountNumber).getUsername() ,atmName,"Emptying" , amount);
                 AdminCashier.addAdminLog(adminLog);
-
             }
             System.out.println("\n\t\tDeposit slot is empty");
             AdminCashier.printAdminLog();
@@ -796,5 +808,41 @@ public class Atm {
         twoHun = depositSlot.getDenominationCount(200);
         fiveHun = depositSlot.getDenominationCount(500);
         twoThous = depositSlot.getDenominationCount(2000);
+    }
+
+    public int getDepositChoice()
+    {
+        int choice =0;
+        while(true)
+        {
+            System.out.println("\nPress 1 to completely fill the cash dispenser");
+            System.out.println("Press 2 to fill the amount taken from deposit slot");
+            System.out.println("Press 0 to exit");
+            try {
+                choice = input.nextInt();
+                if(choice == 1 || choice == 2 || choice == 0)
+                {
+                    break;
+                }
+                else if(configChoice!=1)
+                {
+                    choice = 0;
+                    System.out.println("Invalid choice");
+                    break;
+                }
+            }
+            catch (InputMismatchException inputMismatchException)
+            {
+                System.out.println("Invalid choice");
+                input.nextLine();
+                if(configChoice !=1)
+                {
+                    choice = 0;
+                    break;
+                }
+
+            }
+        }
+        return choice;
     }
 }

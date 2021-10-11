@@ -58,7 +58,7 @@ public class AdminCashier {
 
     public static boolean balanceCheck(int amount)
     {
-        if(bankBalance - amount >=0)
+        if(bankBalance - amount >= 0)
         {
             return true;
         }

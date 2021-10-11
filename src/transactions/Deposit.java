@@ -20,6 +20,7 @@ public class Deposit {
         if(depositSlot.depositCapacityCheck(amount ,hun,twoHun,fiveHun,twoThous))
         {
             account.credit(amount);
+            depositSlot.allDenominations(hun, twoHun, fiveHun, twoThous);
             return true;
         }
         else

@@ -15,7 +15,7 @@ public class DepositSlot {
     {
         depositBalance += amount;
         denomination.addAllDenominations(hun, twoHun, fiveHun , twoThous);
-        denomination.printMap();
+        //denomination.printMap();
     }
 
     public boolean depositCapacityCheck(int amount , int hun , int twoHun , int fiveHun , int twoThous)
@@ -96,6 +96,12 @@ public class DepositSlot {
     public int getDenominationCount(int key)
     {
         return denomination.getCount(key);
+    }
+
+    public void allDenominations(int hun , int twoHun , int fiveHun , int twoThous)
+    {
+        denomination.addAllDenominations(hun, twoHun, fiveHun, twoThous);
+        //denomination.printMap();
     }
 
 }

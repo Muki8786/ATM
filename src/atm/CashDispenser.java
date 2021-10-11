@@ -15,12 +15,13 @@ public class CashDispenser {
     {
         balance -= amount;
         denomination.addAllDenominations(hunCount , twoHunCount , fiveHunCount , twoThousCount);
-        denomination.printMap();
+        //denomination.printMap();
         System.out.println("Please collect the cash");
     }
 
     public boolean sufficientATMBalanceCheck(int amount)
     {
+        //denomination.printMap();
         if(amount <= balance && (amount % 100 == 0) )
         {
             return withdrawWithCount(amount);
@@ -52,6 +53,7 @@ public class CashDispenser {
     {
         balance += amount;
         denomination.addAllDenominations(hun,twoHun,fiveHun,twoThous);
+        //denomination.printMap();
     }
 
     public boolean withdrawWithCount(int amount)
@@ -145,6 +147,16 @@ public class CashDispenser {
     public int getBalance()
     {
         return balance;
+    }
+
+    public int denominationCountNeeded(int key)
+    {
+        return 100 - denomination.getCount(key);
+    }
+
+    public boolean denominationsCheck(int key , int count)
+    {
+        return (count <= denominationCountNeeded(key));
     }
 
 }
