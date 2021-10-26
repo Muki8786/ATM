@@ -26,7 +26,7 @@ public class Account {
         this.mobileNumber = mobileNumber;
     }
 
-    public String getMobileNumber()
+    protected String getMobileNumber()
     {
         return mobileNumber;
     }
@@ -36,7 +36,7 @@ public class Account {
         this.address = address;
     }
 
-    public String getAddress()
+    protected String getAddress()
     {
         return address;
     }

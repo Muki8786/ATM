@@ -1,6 +1,6 @@
 package atm;
 
-public class DepositSlot {
+public class DepositSlot implements DinoDepositSlot, DepositSlotAdminOptions{
     private int depositBalance;
     private static final int depositCapacity = 280000;
     private Denomination denomination;

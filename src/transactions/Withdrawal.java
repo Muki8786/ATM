@@ -3,7 +3,7 @@ package transactions;
 import accounts.Account;
 import atm.CashDispenser;
 
-public class Withdrawal {
+public class Withdrawal implements WithdrawCheck{
 
     private CashDispenser cashDispenser;
     private Account account;
@@ -46,5 +46,4 @@ public class Withdrawal {
         }
         return true;
     }
-
 }

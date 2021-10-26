@@ -2,7 +2,7 @@ package transactions;
 
 import accounts.Account;
 
-public class ChangePin {
+public class ChangePin implements SamePinCheck{
 
     private Account account;
 

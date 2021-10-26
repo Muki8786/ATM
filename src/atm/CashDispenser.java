@@ -1,6 +1,6 @@
 package atm;
 
-public class CashDispenser {
+public class CashDispenser implements DispenserAdminOptions , DinoCashDispenser{
     private static final int initialBalance = 280000;
     private int balance;
     private Denomination denomination;
@@ -42,18 +42,16 @@ public class CashDispenser {
         }
     }
 
+    public int getBalance()
+    {
+        return balance;
+    }
+
     public int getAmount()
     {
         int amount = initialBalance-balance;
         System.out.println("\nThe amount needed to be full is Rs."+ amount);
         return amount;
-    }
-
-    public void insertIntoDispenser(int amount , int hun , int twoHun, int fiveHun , int twoThous)
-    {
-        balance += amount;
-        denomination.addAllDenominations(hun,twoHun,fiveHun,twoThous);
-        //denomination.printMap();
     }
 
     public boolean withdrawWithCount(int amount)
@@ -144,9 +142,11 @@ public class CashDispenser {
         System.out.println();
     }
 
-    public int getBalance()
+    public void insertIntoDispenser(int amount , int hun , int twoHun, int fiveHun , int twoThous)
     {
-        return balance;
+        balance += amount;
+        denomination.addAllDenominations(hun,twoHun,fiveHun,twoThous);
+        //denomination.printMap();
     }
 
     public int denominationCountNeeded(int key)

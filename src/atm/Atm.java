@@ -727,7 +727,7 @@ public class Atm {
 
     }
 
-    public void getConfigChoice()
+   /* public void getConfigChoice()
     {
         int choice =0;
         System.out.println("Press 1 to redirect to main menu after a Transaction");
@@ -756,6 +756,7 @@ public class Atm {
             configChoice = 0;
         }
     }
+    */
 
     public int getCount(int key)
     {
