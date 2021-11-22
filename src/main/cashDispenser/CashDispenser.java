@@ -1,8 +1,7 @@
 package main.cashDispenser;
 
 import main.Denomination;
-import main.cashDispenser.DinoCashDispenser;
-import main.cashDispenser.DispenserAdminOptions;
+
 
 public class CashDispenser implements DispenserAdminOptions, DinoCashDispenser {
     private static final int initialBalance = 280000;
@@ -57,7 +56,6 @@ public class CashDispenser implements DispenserAdminOptions, DinoCashDispenser {
     public int getAmount()
     {
         int amount = initialBalance-balance;
-        System.out.println("\nThe amount needed to be full is Rs."+ amount);
         return amount;
     }
 

@@ -21,21 +21,6 @@ public class LoginUI{
 
     }
 
-    /*public boolean authenticate(int accountNumber , int pin)
-    {
-
-        if(accountsDatabase.authenticateUser(accountNumber,pin))
-        {
-            currentAccountNumber = accountNumber;
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
-
-     */
     public int inputAccountNumber()
     {
         System.out.println("\n\t\tWelcome to the ATM\n");

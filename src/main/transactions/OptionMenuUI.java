@@ -36,40 +36,6 @@ public class OptionMenuUI {
                 }
             }
         }
-
-        /*switch (choice)
-        {
-            case 0 :
-                Logout.logout();
-                break;
-            case 1 :
-                new BalanceInquiry().printBalance(accountNumber);
-                break;
-            case 2 :
-                new WithdrawMain(accountNumber).startWithdraw();
-                break;
-            case 3 :
-                new FastCashMain(accountNumber).fastCash();
-                break;
-            case 4 :
-                new DepositMain(accountNumber).startDeposit();
-                break;
-            case 5 :
-                new ChangePinMain(accountNumber).printSuccess();
-                break;
-            case 6 :
-                new FundTransferMain(accountNumber).startFundTransfer();
-                break;
-            default:
-            {
-                System.out.println("Invalid choice");
-                Logout.logout();
-            }
-
-        }
-
-         */
-
         return choice;
     }
 

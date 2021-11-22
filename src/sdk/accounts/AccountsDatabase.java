@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class AccountsDatabase {
     private static ArrayList<Account> accounts = new ArrayList<Account>() ;
-    //public static AccountsDatabase accountsDatabase;
 
     public AccountsDatabase()
     {
@@ -57,13 +56,5 @@ public class AccountsDatabase {
 
     }
 
-   /* public static AccountsDatabase getAccountDatabase()
-    {
-        if(accountsDatabase!=null)
-            accountsDatabase = new AccountsDatabase();
-        return accountsDatabase;
-    }
-
-    */
 
 }

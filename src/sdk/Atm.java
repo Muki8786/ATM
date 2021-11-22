@@ -1,7 +1,9 @@
 package sdk;
 
+import main.StartAtm;
 import main.cashDispenser.CashDispenser;
 import main.depositSlot.DepositSlot;
+import sdk.optionMenu.AdminOptionMenu;
 import sdk.optionMenu.OptionMenu;
 import sdk.transactions.Login;
 
@@ -25,12 +27,13 @@ public class Atm {
         if(login.login())
         {
             accountNumber = login.getAccountNumber();
-            //if(!account.getAdmin())
-            //new OptionMenuUI(accountNumber).optionMenu();
-            new OptionMenu().createOptionMenu(accountNumber);
-            //else
+            if(!login.checkAdmin())
             {
-                //createAdminMenu();
+                new OptionMenu().createOptionMenu(accountNumber);
+            }
+            else
+            {
+                new AdminOptionMenu(atmName).createAdminMenu(accountNumber);
             }
         }
         else
@@ -42,6 +45,11 @@ public class Atm {
     public static void createOptionMenuUI(int accountNumber)
     {
         new OptionMenu().createOptionMenu(accountNumber);
+    }
+
+    public static void createAdminOptionMenu(int accountNumber)
+    {
+        new AdminOptionMenu(StartAtm.atmName).createAdminMenu(accountNumber);
     }
 
 

@@ -5,9 +5,11 @@ import sdk.Atm;
 public class StartAtm {
 
     private static Atm atm;
+    public static String atmName = "First ";
+
     public static void main(String args[])
     {
-        atm = new Atm("FIRST ");
+        atm = new Atm(atmName);
         atm.run();
 
 

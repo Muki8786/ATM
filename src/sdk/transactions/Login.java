@@ -28,9 +28,12 @@ public class Login extends GlobalDatabase{
         int pin = loginUI.inputPin();
         if(loginCheck(accountNumber,pin))
         {
+            String name = accountsDatabase.getAccount(accountNumber).getUsername();
+            loginUI.login(true,name);
             return true;
         }
         else {
+            loginUI.login(false,"Empty");
             return false;
         }
     }
@@ -40,4 +43,8 @@ public class Login extends GlobalDatabase{
         return accountNumber;
     }
 
+    public boolean checkAdmin()
+    {
+        return accountsDatabase.getAccount(accountNumber).getAdmin();
+    }
 }
