@@ -2,7 +2,7 @@ package main;
 
 import java.util.HashMap;
 
-public class Denomination {
+public class Denomination implements IDenomination {
 
     private static final int maxCount = 100;
     private HashMap<Integer,Integer> denominationCount ;
@@ -16,7 +16,8 @@ public class Denomination {
         denominationCount.put(2000,count);
     }
 
-    public void addAllDenominations(int hun , int twoHun , int fiveHun , int twoThous)
+    @Override
+    public void addAllDenominations(int hun, int twoHun, int fiveHun, int twoThous)
     {
         denominationCount.put(100,hun);
         denominationCount.put(200,twoHun);
@@ -24,22 +25,26 @@ public class Denomination {
         denominationCount.put(2000,twoThous);
     }
 
+    @Override
     public int getCount(int key)
     {
         return denominationCount.get(key);
     }
 
-    public void setCount(int key , int value)
+    @Override
+    public void setCount(int key, int value)
     {
         denominationCount.replace(key,value);
     }
 
+    @Override
     public void printMap()
     {
         System.out.println();
         System.out.println(denominationCount);
     }
 
+    @Override
     public int getMaxCount()
     {
         return maxCount;

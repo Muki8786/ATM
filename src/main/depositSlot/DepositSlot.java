@@ -1,20 +1,22 @@
 package main.depositSlot;
 
-import main.Denomination;
+import main.IDenomination;
+import sdk.UI.IDepositSlot;
 
-public class DepositSlot implements DinoDepositSlot, DepositSlotAdminOptions {
-    private int depositBalance;
+public class DepositSlot implements IDepositSlot {
+    public static int depositBalance;
     private static final int depositCapacity = 280000;
-    private Denomination denomination;
+    private IDenomination denomination;
     private static DepositSlot depositSlot;
 
-    public DepositSlot()
+    private DepositSlot(IDenomination denomination)
     {
         depositBalance = 0;
-        denomination = new Denomination(0);
+        this.denomination = denomination;
     }
 
-    public void acceptCash(int amount, int hun , int twoHun , int fiveHun , int twoThous)
+    @Override
+    public void acceptCash(int amount, int hun, int twoHun, int fiveHun, int twoThous)
     {
         depositBalance += amount;
         denomination.addAllDenominations(hun+ denomination.getCount(100),
@@ -24,7 +26,8 @@ public class DepositSlot implements DinoDepositSlot, DepositSlotAdminOptions {
         denomination.printMap();
     }
 
-    public boolean depositCapacityCheck(int amount , int hun , int twoHun , int fiveHun , int twoThous)
+    @Override
+    public boolean depositCapacityCheck(int amount, int hun, int twoHun, int fiveHun, int twoThous)
     {
         if(depositBalance == depositCapacity)
         {
@@ -88,33 +91,37 @@ public class DepositSlot implements DinoDepositSlot, DepositSlotAdminOptions {
         }
     }
 
+    @Override
     public void withdrawFromDepositSlot()
     {
         depositBalance = 0;
         denomination.addAllDenominations(0,0,0,0);
     }
 
+    @Override
     public int getAmount()
     {
         int amount = depositBalance ;
         return amount;
     }
 
+    @Override
     public int getDenominationCount(int key)
     {
         return denomination.getCount(key);
     }
 
-    public void allDenominations(int hun , int twoHun , int fiveHun , int twoThous)
+    @Override
+    public void allDenominations(int hun, int twoHun, int fiveHun, int twoThous)
     {
         denomination.addAllDenominations(hun, twoHun, fiveHun, twoThous);
         //denomination.printMap();
     }
 
-    public static DepositSlot getInstance()
-    {
-        if(depositSlot==null)
-            depositSlot = new DepositSlot();
-        return depositSlot;
+    public static DepositSlot getInstance(IDenomination denomination) {
+        if (DepositSlot.depositSlot == null)
+            DepositSlot.depositSlot = new DepositSlot(denomination);
+        return DepositSlot.depositSlot;
     }
+
 }

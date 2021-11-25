@@ -1,39 +1,46 @@
 package sdk.transactions;
 
-import main.transactions.WithdrawMain;
 import sdk.Atm;
+
+import sdk.UI.ICashDispenser;
+import sdk.UI.ILogout;
+import sdk.UI.IWithdrawUI;
 import sdk.accounts.Account;
-import main.cashDispenser.CashDispenser;
 
-import static main.global.GlobalConfigChoice.configChoice;
-import static main.global.Logout.logout;
+import static sdk.GlobalConfigChoice.configChoice;
 
-public class Withdrawal implements WithdrawCheck {
 
-    private CashDispenser cashDispenser;
+public class Withdrawal {
+
+    private IWithdrawUI withdrawUI;
+    private ICashDispenser cashDispenser;
     private int accountNumber;
     private int amount;
+    private ILogout logout;
 
-    public Withdrawal(int accountNumber)
+    public Withdrawal(IWithdrawUI withdrawUI , ICashDispenser cashDispenser ,ILogout logout,int accountNumber)
     {
+        this.withdrawUI = withdrawUI;
         this.accountNumber = accountNumber;
-        this.cashDispenser = CashDispenser.getInstance();
+        this.cashDispenser = cashDispenser;
         this.amount = 0;
+        this.logout = logout;
     }
 
-    public Withdrawal(int accountNumber , int amount)
+    public Withdrawal(IWithdrawUI withdrawUI , ICashDispenser cashDispenser ,int accountNumber , int amount)
     {
         this.accountNumber = accountNumber;
-        this.cashDispenser = CashDispenser.getInstance();
+        this.cashDispenser = cashDispenser;
+        this.withdrawUI = withdrawUI;
         this.amount = amount;
     }
 
     public void withdraw()
     {
-        WithdrawMain withdrawMain = new WithdrawMain();
+
 
         if(amount == 0)
-        amount = withdrawMain.getAmount();
+        amount = withdrawUI.getAmount();
 
         if(amount!=0)
         {
@@ -48,30 +55,31 @@ public class Withdrawal implements WithdrawCheck {
                         //cashDispenser.denominationsAvailable();
                         cashDispenser.withdrawWithCount(amount);
                         account.debit(amount);
-                        withdrawMain.printSuccess(1);
+                        withdrawUI.printSuccess(1);
                     }
                     else
                     {
-                        withdrawMain.printSuccess(-1);
+                        withdrawUI.printSuccess(-1);
                     }
                 }
                 else
                 {
-                    withdrawMain.printSuccess(0);
+                    withdrawUI.printSuccess(0);
                 }
             }
             else {
-                withdrawMain.printNoCashInATM();
+                withdrawUI.printNoCashInATM();
             }
         }
 
         if(configChoice == 1)
         {
-            Atm.createOptionMenuUI(accountNumber);
+            Atm.createOptionMenu(accountNumber);
         }
         else
         {
-            logout();
+            logout.logout();
+            Atm.restart();
         }
 
     }

@@ -1,21 +1,24 @@
 package main.cashDispenser;
 
-import main.Denomination;
+
+import main.IDenomination;
+import sdk.UI.ICashDispenser;
 
 
-public class CashDispenser implements DispenserAdminOptions, DinoCashDispenser {
+public class CashDispenser implements ICashDispenser {
     private static final int initialBalance = 280000;
-    private int balance;
-    private Denomination denomination;
+    public static int balance;
+    private IDenomination denomination;
     private static CashDispenser cashDispenser;
 
-    private CashDispenser()
+    private CashDispenser(IDenomination denomination)
     {
-        denomination = new Denomination(100);
+        this.denomination = denomination;
         balance = initialBalance;
     }
 
-    public void dispenseCash(int amount , int hunCount , int twoHunCount , int fiveHunCount ,int twoThousCount )//amount should be divisible by 100 || 200 || 500 || 2000
+    @Override
+    public void dispenseCash(int amount, int hunCount, int twoHunCount, int fiveHunCount, int twoThousCount)//amount should be divisible by 100 || 200 || 500 || 2000
     {
         balance -= amount;
         denomination.addAllDenominations(hunCount , twoHunCount , fiveHunCount , twoThousCount);
@@ -23,6 +26,7 @@ public class CashDispenser implements DispenserAdminOptions, DinoCashDispenser {
         //System.out.println(balance);
     }
 
+    @Override
     public boolean sufficientATMBalanceCheck(int amount)
     {
         //denomination.printMap();
@@ -48,17 +52,20 @@ public class CashDispenser implements DispenserAdminOptions, DinoCashDispenser {
     }
 
 
+    @Override
     public int getBalance()
     {
         return balance;
     }
 
+    @Override
     public int getAmount()
     {
         int amount = initialBalance-balance;
         return amount;
     }
 
+    @Override
     public void withdrawWithCount(int amount)
     {
         int hun = denomination.getCount(100);
@@ -119,6 +126,7 @@ public class CashDispenser implements DispenserAdminOptions, DinoCashDispenser {
         }
     }
 
+    @Override
     public void denominationsAvailable()
     {
         int hun = denomination.getCount(100);
@@ -146,28 +154,30 @@ public class CashDispenser implements DispenserAdminOptions, DinoCashDispenser {
         System.out.println();
     }
 
-    public void insertIntoDispenser(int amount , int hun , int twoHun, int fiveHun , int twoThous)
+    @Override
+    public void insertIntoDispenser(int amount, int hun, int twoHun, int fiveHun, int twoThous)
     {
         balance += amount;
         denomination.addAllDenominations(hun,twoHun,fiveHun,twoThous);
         //denomination.printMap();
     }
 
+    @Override
     public int denominationCountNeeded(int key)
     {
         return 100 - denomination.getCount(key);
     }
 
-    public boolean denominationsCheck(int key , int count)
+    @Override
+    public boolean denominationsCheck(int key, int count)
     {
         return (count <= denominationCountNeeded(key));
     }
 
-    public static CashDispenser getInstance()
-    {
-        if(cashDispenser==null)
-            cashDispenser = new CashDispenser();
-        return cashDispenser;
+    public static CashDispenser getInstance(IDenomination denomination) {
+        if (CashDispenser.cashDispenser == null)
+            CashDispenser.cashDispenser = new CashDispenser(denomination);
+        return CashDispenser.cashDispenser;
     }
 
 }

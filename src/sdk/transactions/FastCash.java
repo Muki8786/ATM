@@ -1,29 +1,44 @@
 package sdk.transactions;
 
-import main.transactions.FastCashMain;
-import main.global.Logout;
 
-import static main.global.GlobalConfigChoice.configChoice;
+
+import sdk.Atm;
+import sdk.UI.ICashDispenser;
+import sdk.UI.IFastCashUI;
+import sdk.UI.ILogout;
+import sdk.UI.IWithdrawUI;
+
+
+import static sdk.GlobalConfigChoice.configChoice;
 
 public class FastCash {
     private int accountNumber;
+    private IFastCashUI fastCashUI;
+    private IWithdrawUI withdrawUI;
+    private ICashDispenser cashDispenser;
+    private ILogout logout;
 
-    public FastCash(int accountNumber)
+    public FastCash(IFastCashUI fastCashUI , IWithdrawUI withdrawUI, ICashDispenser cashDispenser,ILogout logout, int accountNumber)
     {
+        this.fastCashUI = fastCashUI;
         this.accountNumber = accountNumber;
+        this.withdrawUI = withdrawUI;
+        this.cashDispenser = cashDispenser;
+        this.logout = logout;
     }
 
     public void fastCash()
     {
-        FastCashMain fastCashMain = new FastCashMain();
+
         int amount = 0;
 
-        int choice = fastCashMain.getFastCashMenuChoice();
+        int choice = fastCashUI.getFastCashMenuChoice();
         switch (choice)
         {
             case 0 :
             case -2 :
-                Logout.logout();
+                logout.logout();
+                Atm.restart();
                 break;
             case 1 :
                 amount = 500;
@@ -41,12 +56,13 @@ public class FastCash {
             {
                 if (configChoice != 1)
                 {
-                    fastCashMain.printInvalidInput();
-                    Logout.logout();
+                    fastCashUI.printInvalidInput();
+                    logout.logout();
+                    Atm.restart();
                 }
                 else
                 {
-                    fastCashMain.printInvalidInput();
+                    fastCashUI.printInvalidInput();
                     fastCash();
                 }
             }
@@ -54,7 +70,7 @@ public class FastCash {
 
         if(amount>0)
         {
-            new Withdrawal(accountNumber,amount).withdraw();
+            new Withdrawal(withdrawUI ,cashDispenser ,accountNumber,amount).withdraw();
         }
     }
 }

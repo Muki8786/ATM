@@ -1,11 +1,13 @@
 package main.transactions;
 
+import sdk.UI.IOptionMenuUI;
+
 import java.util.InputMismatchException;
 
-import static main.global.GlobalConfigChoice.configChoice;
+import static sdk.GlobalConfigChoice.configChoice;
 import static main.global.Input.input;
 
-public class OptionMenuUI {
+public class OptionMenuUI implements IOptionMenuUI {
 
 
 
@@ -13,6 +15,7 @@ public class OptionMenuUI {
     {
     }
 
+    @Override
     public int optionMenu()
     {
         int choice = 0;
@@ -39,6 +42,7 @@ public class OptionMenuUI {
         return choice;
     }
 
+    @Override
     public void printInvalidInput()
     {
         System.out.println("\nInvalid choice");

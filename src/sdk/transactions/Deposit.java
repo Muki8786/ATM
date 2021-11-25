@@ -1,40 +1,48 @@
 package sdk.transactions;
 
-import main.transactions.DepositMain;
 import sdk.Atm;
+import sdk.UI.IDepositSlot;
+import sdk.UI.IDepositUI;
+import sdk.UI.ILogout;
 import sdk.accounts.Account;
-import main.depositSlot.DepositSlot;
 
-import static main.global.GlobalConfigChoice.configChoice;
-import static main.global.Logout.logout;
-
+import static sdk.GlobalConfigChoice.configChoice;
 
 public class Deposit {
-    private int accountNumber;
-    private DepositSlot depositSlot;
+    private final int accountNumber;
+    private IDepositSlot depositSlot;
+    private IDepositUI depositUI;
     public boolean fundTransferSuccess;
+    private ILogout logout;
 
-    public Deposit(int accountNumber)
+    public Deposit(IDepositUI depositUI , IDepositSlot depositSlot ,ILogout logout, int accountNumber)
     {
         this.accountNumber = accountNumber;
-        this.depositSlot = DepositSlot.getInstance();
+        this.depositUI = depositUI;
+        this.depositSlot = depositSlot;
         fundTransferSuccess = false;
+        this.logout = logout;
     }
 
     public void deposit()
     {
         int hunCount =0,twoHunCount =0,fiveHunCount =0 , twoThousCount =0;
-        DepositMain depositMain = new DepositMain();
-        int amount = depositMain.getAmount();
+        //DepositUI depositUI = new DepositUI();
+        int amount = depositUI.getAmount();
         if(amount == 0 && configChoice != 1)
         {
-            logout();
+            logout.logout();
+            Atm.restart();
+        }
+        else if(amount==0)
+        {
+            Atm.createOptionMenu(accountNumber);
         }
         else {
-            hunCount = depositMain.getCount(100);
-            twoHunCount = depositMain.getCount(200);
-            fiveHunCount = depositMain.getCount(500);
-            twoThousCount = depositMain.getCount(2000);
+            hunCount = depositUI.getCount(100);
+            twoHunCount = depositUI.getCount(200);
+            fiveHunCount = depositUI.getCount(500);
+            twoThousCount = depositUI.getCount(2000);
         }
 
 
@@ -47,27 +55,28 @@ public class Deposit {
                 depositSlot.acceptCash(amount, hunCount,twoHunCount,fiveHunCount,twoThousCount);
                 account.credit(amount);
                 //depositSlot.allDenominations(hun, twoHun, fiveHun, twoThous);
-                depositMain.printSuccess(true);
+                depositUI.printSuccess(true);
                 fundTransferSuccess = true;
             }
             else
             {
-                depositMain.printSuccess(false);
+                depositUI.printSuccess(false);
             }
         }
         else
         {
-            depositMain.printDenominationCheck();
+            depositUI.printDenominationCheck();
         }
 
 
         if(configChoice == 1)
         {
-            Atm.createOptionMenuUI(accountNumber);
+            Atm.createOptionMenu(accountNumber);
         }
         else
         {
-            logout();
+            logout.logout();
+            Atm.restart();
         }
     }
 

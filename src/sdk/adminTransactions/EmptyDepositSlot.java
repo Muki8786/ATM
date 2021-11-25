@@ -1,19 +1,23 @@
 package sdk.adminTransactions;
 
-import main.AdminUI;
 import main.depositSlot.DepositSlot;
 import sdk.Atm;
+import main.StartAtm;
+import sdk.UI.IAdminUI;
+import sdk.UI.IDepositSlot;
+import sdk.UI.ILogout;
 import sdk.accounts.AccountsDatabase;
 import sdk.bank.AdminCashier;
 import sdk.bank.AdminLog;
 import sdk.transactions.GlobalDatabase;
 
-import static main.global.GlobalConfigChoice.configChoice;
-import static main.global.Logout.logout;
+import static sdk.GlobalConfigChoice.configChoice;
 
-public class EmptyDepositSlot extends GlobalDatabase{
 
-    private DepositSlot depositSlot;
+public class EmptyDepositSlot extends GlobalDatabase {
+
+    private IAdminUI adminUI;
+    private IDepositSlot depositSlot;
     private AccountsDatabase accountsDatabase;
     private int depositAmount;
     private int hunCount;
@@ -21,10 +25,13 @@ public class EmptyDepositSlot extends GlobalDatabase{
     private int fiveHunCount;
     private int twoThousCount;
     private final String atmName;
+    private boolean allow;
+    private ILogout logout;
 
-    public EmptyDepositSlot(String atmName)
+    public EmptyDepositSlot(IAdminUI adminUI , IDepositSlot depositSlot ,ILogout logout, String atmName, boolean allow)
     {
-        depositSlot = DepositSlot.getInstance();
+        this.adminUI = adminUI;
+        this.depositSlot = depositSlot;
         this.accountsDatabase = GlobalDatabase.accountsDatabase;
         depositAmount =0;
         hunCount =0;
@@ -32,12 +39,13 @@ public class EmptyDepositSlot extends GlobalDatabase{
         fiveHunCount =0;
         twoThousCount = 0;
         this.atmName = atmName;
+        this.allow = allow;
+        this.logout = logout;
     }
 
 
 
-    public void emptyDepositSlot(int accountNumber) {
-        AdminUI adminUI = new AdminUI();
+    public void emptyDepositSlot(int accountNumber){
         int amount = depositSlot.getAmount();
         depositAmount = amount;
         setCount();
@@ -45,6 +53,7 @@ public class EmptyDepositSlot extends GlobalDatabase{
             adminUI.printDepositSlotSuccess(amount);
             depositSlot.withdrawFromDepositSlot();
             AdminCashier.creditBankBalance(amount);
+            System.out.println(DepositSlot.depositBalance);
             AdminLog adminLog = new AdminLog(accountsDatabase.getAccount(accountNumber).getUsername(), atmName, "Emptying", amount);
             AdminCashier.addAdminLog(adminLog);
             setGlobals();
@@ -52,10 +61,16 @@ public class EmptyDepositSlot extends GlobalDatabase{
         adminUI.printDepositSlotSuccess(0);
         AdminCashier.printAdminLog();
 
+        if(!allow)
+        {
+            return;
+        }
+
         if (configChoice == 1) {
             Atm.createAdminOptionMenu(accountNumber);
         } else {
-            logout();
+            logout.logout();
+            StartAtm.restart();
         }
 
     }

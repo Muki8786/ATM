@@ -1,14 +1,18 @@
 package sdk.transactions;
 
-import main.transactions.LoginUI;
+
+
+import sdk.UI.ILoginUI;
 import sdk.accounts.AccountsDatabase;
 
-public class Login extends GlobalDatabase{
+public class Login  {
     private AccountsDatabase accountsDatabase ;
     private int accountNumber;
+    private ILoginUI loginUI;
 
-    public Login()
+    public Login(ILoginUI loginUI)
     {
+        this.loginUI = loginUI;
         this.accountsDatabase = GlobalDatabase.accountsDatabase;
     }
 
@@ -23,7 +27,6 @@ public class Login extends GlobalDatabase{
 
     public boolean login()
     {
-        LoginUI loginUI = new LoginUI();
         accountNumber = loginUI.inputAccountNumber();
         int pin = loginUI.inputPin();
         if(loginCheck(accountNumber,pin))

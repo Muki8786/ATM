@@ -1,46 +1,73 @@
 package sdk.optionMenu;
 
-import main.global.Logout;
-import main.transactions.OptionMenuUI;
+import sdk.Atm;
+import sdk.UI.*;
 import sdk.transactions.*;
 
-import static main.global.GlobalConfigChoice.configChoice;
+import static sdk.GlobalConfigChoice.configChoice;
 
 public class OptionMenu {
 
+    private IBalanceInquiryUI balanceInquiryUI;
+    private IChangePinUI changePinUI;
+    private IDepositUI depositUI;
+    private IFastCashUI fastCashUI;
+    private IFundTransferUI fundTransferUI;
+    private IOptionMenuUI optionMenuUI;
+    private IWithdrawUI withdrawUI;
+    private ICashDispenser cashDispenser;
+    private IDepositSlot depositSlot;
+    private ILogout logout;
+
+    public OptionMenu(IBalanceInquiryUI balanceInquiryUI, IChangePinUI changePinUI, IDepositUI depositUI, IFastCashUI fastCashUI, IFundTransferUI fundTransferUI, IOptionMenuUI optionMenuUI, IWithdrawUI withdrawUI, ICashDispenser cashDispenser, IDepositSlot depositSlot,ILogout logout) {
+        this.balanceInquiryUI = balanceInquiryUI;
+        this.changePinUI = changePinUI;
+        this.depositUI = depositUI;
+        this.fastCashUI = fastCashUI;
+        this.fundTransferUI = fundTransferUI;
+        this.optionMenuUI = optionMenuUI;
+        this.withdrawUI = withdrawUI;
+        this.cashDispenser = cashDispenser;
+        this.depositSlot = depositSlot;
+        this.logout = logout;
+    }
+
+
+
     public void createOptionMenu(int accountNumber)
     {
-        OptionMenuUI optionMenuUI = new OptionMenuUI();
         int choice = optionMenuUI.optionMenu();
         switch (choice)
         {
             case 0 :
             case -2 :
-                Logout.logout();
+                logout.logout();
+                Atm.restart();
                 break;
             case 1 :
-                new BalanceInquiry().balanceInquiry(accountNumber);
+                new BalanceInquiry(balanceInquiryUI,logout).balanceInquiry(accountNumber);
                 break;
             case 2 :
-                new Withdrawal(accountNumber).withdraw();
+                new Withdrawal(withdrawUI,cashDispenser,logout,accountNumber).withdraw();
                 break;
             case 3 :
-                new FastCash(accountNumber).fastCash();
+                new FastCash(fastCashUI,withdrawUI ,cashDispenser ,logout,accountNumber).fastCash();
                 break;
             case 4 :
-                new Deposit(accountNumber).deposit();
+                new Deposit(depositUI,depositSlot,logout,accountNumber).deposit();
                 break;
             case 5 :
-                new ChangePin(accountNumber).changeUserPin();
+                new ChangePin(changePinUI,logout,accountNumber).changeUserPin();
                 break;
             case 6 :
-                new FundTransfer(accountNumber).fundTransfer();
+                new FundTransfer(fundTransferUI,depositUI,depositSlot,logout,accountNumber).fundTransfer();
                 break;
             default:
             {
                 if(configChoice!=1) {
                     optionMenuUI.printInvalidInput();
-                    Logout.logout();
+                    logout.logout();
+                    Atm.restart();
                 }
                 else
                 {

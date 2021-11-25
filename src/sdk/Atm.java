@@ -1,39 +1,63 @@
 package sdk;
 
-import main.StartAtm;
-import main.cashDispenser.CashDispenser;
-import main.depositSlot.DepositSlot;
+import sdk.UI.*;
 import sdk.optionMenu.AdminOptionMenu;
 import sdk.optionMenu.OptionMenu;
 import sdk.transactions.Login;
 
 public class Atm {
-    private int accountNumber;
+    private static String atmName;
+    private IBalanceInquiryUI balanceInquiryUI;
+    private IChangePinUI changePinUI;
+    private IDepositUI depositUI;
+    private IFastCashUI fastCashUI;
+    private IFundTransferUI fundTransferUI;
+    private ILoginUI loginUI;
+    private IOptionMenuUI optionMenuUI;
+    private IWithdrawUI withdrawUI;
+    private IAdminUI adminUI;
+    private ICashDispenser cashDispenser;
+    private IDepositSlot depositSlot;
+    private static OptionMenu optionMenu;
+    private static AdminOptionMenu adminOptionMenu;
+    private ILogout logout;
 
-    private String atmName;
-    private CashDispenser cashDispenser;
-    private DepositSlot depositSlot;
+    private static Atm atm;
 
-    public Atm(String atmName)
-    {
-        this.atmName = atmName;
-        cashDispenser = CashDispenser.getInstance();
-        depositSlot = DepositSlot.getInstance();
+
+    public Atm(IBalanceInquiryUI balanceInquiryUI, IChangePinUI changePinUI, IDepositUI depositUI, IFastCashUI fastCashUI, IFundTransferUI fundTransferUI, ILoginUI loginUI, IOptionMenuUI optionMenuUI, IWithdrawUI withdrawUI, IAdminUI adminUI, ICashDispenser cashDispenser, IDepositSlot depositSlot,ILogout logout, String atmName) {
+        this.balanceInquiryUI = balanceInquiryUI;
+        this.changePinUI = changePinUI;
+        this.depositUI = depositUI;
+        this.fastCashUI = fastCashUI;
+        this.fundTransferUI = fundTransferUI;
+        this.loginUI = loginUI;
+        this.optionMenuUI = optionMenuUI;
+        this.withdrawUI = withdrawUI;
+        this.adminUI = adminUI;
+        this.cashDispenser = cashDispenser;
+        this.depositSlot = depositSlot;
+        this.logout = logout;
+        Atm.atmName = atmName;
+
     }
 
     public void run()
     {
-        Login login = new Login();
+        Login login = new Login(loginUI);
         if(login.login())
         {
-            accountNumber = login.getAccountNumber();
+            int accountNumber = login.getAccountNumber();
             if(!login.checkAdmin())
             {
-                new OptionMenu().createOptionMenu(accountNumber);
+                optionMenu = new OptionMenu(balanceInquiryUI,changePinUI,depositUI,fastCashUI,fundTransferUI,optionMenuUI
+                ,withdrawUI,cashDispenser,depositSlot,logout);
+                        optionMenu.createOptionMenu(accountNumber);
             }
             else
             {
-                new AdminOptionMenu(atmName).createAdminMenu(accountNumber);
+                adminOptionMenu = new AdminOptionMenu(adminUI,cashDispenser,depositSlot,logout,atmName);
+                adminOptionMenu.createAdminMenu(accountNumber);
             }
         }
         else
@@ -42,16 +66,23 @@ public class Atm {
         }
     }
 
-    public static void createOptionMenuUI(int accountNumber)
+    public static void createOptionMenu(int accountNumber)
     {
-        new OptionMenu().createOptionMenu(accountNumber);
+        optionMenu.createOptionMenu(accountNumber);
     }
 
     public static void createAdminOptionMenu(int accountNumber)
     {
-        new AdminOptionMenu(StartAtm.atmName).createAdminMenu(accountNumber);
+        adminOptionMenu.createAdminMenu(accountNumber);
     }
 
+    public static void setAtm(Atm atm)
+    {
+        Atm.atm = atm;
+    }
 
-
+    public static void restart()
+    {
+        atm.run();
+    }
 }

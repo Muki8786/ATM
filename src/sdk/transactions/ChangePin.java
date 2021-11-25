@@ -1,20 +1,26 @@
 package sdk.transactions;
 
-import main.transactions.ChangePinMain;
 import sdk.Atm;
+import sdk.UI.IChangePinUI;
+import sdk.UI.ILogout;
 import sdk.accounts.Account;
 
-import static main.global.GlobalConfigChoice.configChoice;
-import static main.global.Logout.logout;
 
-public class ChangePin{
+import static sdk.GlobalConfigChoice.configChoice;
+
+
+public class ChangePin {
+
 
     private final int accountNumber;
+    private IChangePinUI changePinUI;
+    private ILogout logout;
 
-
-    public ChangePin(int accountNumber)
+    public ChangePin(IChangePinUI changePinUI,ILogout logout ,int accountNumber)
     {
+        this.changePinUI = changePinUI;
         this.accountNumber = accountNumber;
+        this.logout = logout;
     }
 
     private boolean verifyOldPin(int newPin, int oldPin)
@@ -32,28 +38,29 @@ public class ChangePin{
 
     public void changeUserPin()
     {
-        ChangePinMain changePinMain = new ChangePinMain();
+
         Account account = GlobalDatabase.accountsDatabase.getAccount(accountNumber);
         int oldPin = account.getPin();
-        int newPin = changePinMain.getNewPin();
+        int newPin = changePinUI.getNewPin();
 
 
         if(verifyOldPin(oldPin, newPin))
         {
             account.setPin(newPin);
-            changePinMain.printSuccess(true);
+            changePinUI.printSuccess(true);
         }
         else{
-            changePinMain.printSuccess(false);
+            changePinUI.printSuccess(false);
         }
 
         if(configChoice == 1)
         {
-            Atm.createOptionMenuUI(accountNumber);
+            Atm.createOptionMenu(accountNumber);
         }
         else
         {
-            logout();
+            logout.logout();
+            Atm.restart();
         }
     }
 }

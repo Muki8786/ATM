@@ -1,26 +1,36 @@
 package sdk.transactions;
 
-import main.transactions.BalanceInquiryUI;
 import sdk.Atm;
+import sdk.UI.IBalanceInquiryUI;
+import sdk.UI.ILogout;
 
-import static main.global.GlobalConfigChoice.configChoice;
-import static main.global.Logout.logout;
+import static sdk.GlobalConfigChoice.configChoice;
+import static sdk.transactions.GlobalDatabase.accountsDatabase;
 
-public class BalanceInquiry extends GlobalDatabase{
 
+public class BalanceInquiry {
+
+    private IBalanceInquiryUI balanceInquiryUI;
+    private ILogout logout;
+
+    public BalanceInquiry(IBalanceInquiryUI balanceInquiryUI,ILogout logout)
+    {
+        this.balanceInquiryUI = balanceInquiryUI;
+        this.logout = logout;
+    }
 
     public void balanceInquiry(int accountNumber) {
-        BalanceInquiryUI balanceInquiryUI = new BalanceInquiryUI();
 
-        float balance = GlobalDatabase.accountsDatabase.getAccount(accountNumber).getBalance();
+        float balance = accountsDatabase.getAccount(accountNumber).getBalance();
         balanceInquiryUI.printBalance(balance);
         if(configChoice == 1)
         {
-            Atm.createOptionMenuUI(accountNumber);
+            Atm.createOptionMenu(accountNumber);
         }
         else
         {
-            logout();
+            logout.logout();
+            Atm.restart();
         }
     }
 }

@@ -1,13 +1,16 @@
 package main.transactions;
 
+import sdk.UI.ILoginUI;
+
 import java.util.InputMismatchException;
 
-import static main.global.GlobalConfigChoice.configChoice;
+import static sdk.GlobalConfigChoice.configChoice;
 import static main.global.Input.input;
 
-public class LoginUI{
+public class LoginUI implements ILoginUI {
 
-    public void login(boolean allow,String name)
+    @Override
+    public void login(boolean allow, String name)
     {
 
         if(allow)
@@ -21,6 +24,7 @@ public class LoginUI{
 
     }
 
+    @Override
     public int inputAccountNumber()
     {
         System.out.println("\n\t\tWelcome to the ATM\n");
@@ -42,6 +46,7 @@ public class LoginUI{
         return userAccountNumber;
     }
 
+    @Override
     public int  inputPin()
     {
         int userPin = 0;

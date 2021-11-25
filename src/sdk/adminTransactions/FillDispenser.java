@@ -1,30 +1,38 @@
 package sdk.adminTransactions;
 
-import main.AdminUI;
 import main.cashDispenser.CashDispenser;
 import sdk.Atm;
+import main.StartAtm;
+import sdk.UI.IAdminUI;
+import sdk.UI.ICashDispenser;
+import sdk.UI.IDepositSlot;
+import sdk.UI.ILogout;
 import sdk.accounts.AccountsDatabase;
 import sdk.bank.AdminCashier;
 import sdk.bank.AdminLog;
 import sdk.transactions.GlobalDatabase;
 
-import static main.global.GlobalConfigChoice.configChoice;
-import static main.global.Logout.logout;
+import static sdk.GlobalConfigChoice.configChoice;
 
-public class FillDispenser extends GlobalDatabase{
+public class FillDispenser extends GlobalDatabase {
     private String atmName;
-    private CashDispenser cashDispenser;
+    private ICashDispenser cashDispenser;
+    private IDepositSlot depositSlot;
+    private IAdminUI adminUI;
     private AccountsDatabase accountsDatabase;
     private int depositAmount;
     private int hunCount;
     private int twoHunCount;
     private int fiveHunCount;
     private int twoThousCount;
+    private ILogout logout;
 
 
-    public FillDispenser(String atmName)
+    public FillDispenser(IAdminUI adminUI , ICashDispenser cashDispenser , IDepositSlot depositSlot ,ILogout logout, String atmName)
     {
-        cashDispenser = CashDispenser.getInstance();
+        this.adminUI = adminUI;
+        this.cashDispenser = cashDispenser;
+        this.depositSlot = depositSlot;
         this.accountsDatabase = GlobalDatabase.accountsDatabase;
         this.atmName = atmName;
         depositAmount =0;
@@ -32,21 +40,22 @@ public class FillDispenser extends GlobalDatabase{
         twoHunCount = 0;
         fiveHunCount =0;
         twoThousCount = 0;
+        this.logout = logout;
     }
 
     public void fillCashDispenser(int accountNumber)
     {
-        AdminUI adminUI = new AdminUI();
+
 
 
         int depositChoice = adminUI.getDepositChoice();
         if(depositChoice == 0)
         {
-            logout();
+            logout.logout();
+            StartAtm.restart();
             return;
         }
         else if(depositChoice == 1) {
-
             depositAmount = cashDispenser.getAmount();
             adminUI.displayAmountToBeDeposited(depositAmount);
             hunCount = cashDispenser.denominationCountNeeded(100);
@@ -56,6 +65,7 @@ public class FillDispenser extends GlobalDatabase{
         }
         else if(depositChoice == 2)
         {
+            new EmptyDepositSlot(adminUI,depositSlot,logout,atmName,false).emptyDepositSlot(accountNumber);
             depositAmount = DenominationsCount.getDepositAmount();
             adminUI.displayAmountRemainingFromDepositSlot(depositAmount);
             hunCount = DenominationsCount.getHunCount();
@@ -71,6 +81,7 @@ public class FillDispenser extends GlobalDatabase{
                 adminUI.askForDeposit();
                 AdminCashier.debitBankBalance(depositAmount);
                 cashDispenser.insertIntoDispenser(depositAmount, hunCount, twoHunCount, fiveHunCount, twoThousCount);
+                System.out.println(CashDispenser.balance);
                 AdminLog adminLog = new AdminLog(accountsDatabase.getAccount(accountNumber).getUsername(), atmName, "Filling", depositAmount);
                 AdminCashier.addAdminLog(adminLog);
                 adminUI.printCashDispenserSuccess(true);
@@ -85,7 +96,8 @@ public class FillDispenser extends GlobalDatabase{
         if (configChoice == 1) {
             Atm.createAdminOptionMenu(accountNumber);
         } else {
-            logout();
+            logout.logout();
+            StartAtm.restart();
         }
     }
 }

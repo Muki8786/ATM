@@ -1,12 +1,12 @@
 package main.global;
 
-import main.StartAtm;
+import sdk.UI.ILogout;
 
-public class Logout {
-    public static void logout()
+public class Logout implements ILogout {
+    @Override
+    public void logout()
     {
         System.out.println("\n\t\tThank you for using our ATM");
-        System.out.println("\t\tPlease sanitize your hands before leaving :) \n\n\n");
-        StartAtm.restart();
+        System.out.println("\t\tPlease sanitize your hands before leaving :) \n\n");
     }
 }
